@@ -131,22 +131,29 @@ const CourseTab = () => {
   };
 
   const togglePublishCourseHandler = async () => {
+    const formData = new FormData();
+    if (input.isPublished) {
+      formData.append("published", input.isPublished);
+    }
     try {
-      const res = await axios.patch(
-        `http://localhost:3000/api/course/${courseId}?publish=${isPublished}`,
-        {},
+      const res = await axios.put(
+        `http://localhost:3000/api/course/${courseId}/course/?publish=${isPublished}`,
+        formData, // No body required
         {
           withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
-      console.log("patch data", res.data);
-
+      console.log("Response data", res.data);
       setIsPublished(!isPublished);
+
+      if (isPublished) {
+        toast.success("Course is published");
+      } else {
+        toast.success("Course is Unpublished");
+      }
+      // Update the state to reflect the new publish status
     } catch (error) {
-      console.log("Error in change status of course", error);
+      console.log("Error in changing course status", error);
     }
   };
 
@@ -189,7 +196,7 @@ const CourseTab = () => {
         </div>
         <div className="space-x-2">
           <Button variant="outline" onClick={togglePublishCourseHandler}>
-            {isPublished ? "Unpublish" : "Publish"}
+            {isPublished ? "Publish" : "Unpublish"}
           </Button>
           <Button>Remove Course</Button>
         </div>

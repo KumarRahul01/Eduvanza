@@ -15,7 +15,7 @@ router.route("/:courseId/lecture").get(IsAuthenticated, handleGetCourseLecture);
 router.route("/:courseId/lecture/:lectureId").post(IsAuthenticated, handleEditLecture);
 router.route("/lecture/:lectureId").delete(IsAuthenticated, handleRemoveLecture);
 router.route("/lecture/:lectureId").get(IsAuthenticated, handleGetLectureById);
-router.route("/:courseId").patch(IsAuthenticated, handleTogglePublishCourse);
+router.route("/:courseId/course").put(IsAuthenticated, handleTogglePublishCourse);
 
 
 export default router;

@@ -8,8 +8,15 @@ import Sidebar from "./pages/admin/Sidebar";
 import Dashboard from "./pages/admin/Dashboard";
 import CourseTable from "./pages/admin/Course/CourseTable";
 import AddCourse from "./pages/admin/Course/AddCourse";
+import EditCourse from "./pages/admin/Course/EditCourse";
+import { AuthContext } from "./contexts/AuthContext";
+import { useContext } from "react";
+import CreateLecture from "./pages/admin/Lectures/createLecture";
+import EditLecture from "./pages/admin/Lectures/EditLecture";
 
 const App = () => {
+  const { userDetails } = useContext(AuthContext);
+
   return (
     <>
       <Navbar />
@@ -22,10 +29,22 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
 
           {/* Admin Routes */}
-          <Route path="/admin" element={<Sidebar />}>
+          <Route
+            path="/admin"
+            element={<Sidebar name={userDetails.fullname} />}
+          >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="course" element={<CourseTable />} />
             <Route path="course/create" element={<AddCourse />} />
+            <Route path="course/:courseId" element={<EditCourse />} />
+            <Route
+              path="course/:courseId/lecture"
+              element={<CreateLecture />}
+            />
+            <Route
+              path="course/:courseId/lecture/:lectureId"
+              element={<EditLecture />}
+            />
           </Route>
         </Routes>
       </main>

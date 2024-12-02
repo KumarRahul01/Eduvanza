@@ -21,7 +21,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { BookCheck, Menu } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "@/contexts/AuthContext";
 
@@ -86,7 +86,14 @@ const Navbar = () => {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer">
-                    <Link to={"/my-learning"}>My Learning</Link>
+                    <NavLink
+                      to="/my-learning"
+                      className={({ isActive }) =>
+                        isActive ? "text-red-500 font-semibold" : "text-black"
+                      }
+                    >
+                      My Learning
+                    </NavLink>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer">
                     Teach On Eduvanza
@@ -94,14 +101,23 @@ const Navbar = () => {
                   <DropdownMenuItem className="cursor-pointer">
                     <Link to={"/profile"}>Edit Profile</Link>
                   </DropdownMenuItem>
-                  {userDetails.role !== "student" ? (
+                  {userDetails.role !== "Student" ? (
                     <>
                       <DropdownMenuItem className="cursor-pointer">
                         Log out
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem className="cursor-pointer">
-                        Dashborad
+                        <NavLink
+                          to="/admin"
+                          className={({ isActive }) =>
+                            isActive
+                              ? "text-red-500 font-semibold"
+                              : "text-black"
+                          }
+                        >
+                          Dashborad
+                        </NavLink>
                       </DropdownMenuItem>
                     </>
                   ) : (

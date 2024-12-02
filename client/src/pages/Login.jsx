@@ -54,26 +54,6 @@ const Login = () => {
     }
   };
 
-  // Importing Mutations from RTK Query
-  // const [
-  //   signUpUser,
-  //   {
-  //     data: signUpData,
-  //     error: signUpError,
-  //     isLoading: signUpIsLoading,
-  //     isSuccess: signUpIsSuccess,
-  //   },
-  // ] = useSignUpUserMutation();
-  // const [
-  //   loginUser,
-  //   {
-  //     data: loginData,
-  //     error: loginError,
-  //     isLoading: loginIsLoading,
-  //     isSuccess: loginIsSuccess,
-  //   },
-  // ] = useLoginUserMutation();
-
   const signUpLogic = async () => {
     try {
       setIsLoading(true);

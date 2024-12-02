@@ -1,11 +1,10 @@
 import { Course } from "../models/course.model.js";
-// import { Lecture } from "../models/lecture.model.js";
+import { Lecture } from "../models/lecture.model.js";
 import { deleteMediaFromCloudinary, deleteVideoFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 
 export const handleCreateCourse = async (req, res) => {
   try {
     const { courseTitle, category } = req.body;
-    console.log(courseTitle, category);
 
     if (!courseTitle || !category) {
       return res.status(400).json({
@@ -30,7 +29,7 @@ export const handleCreateCourse = async (req, res) => {
   }
 }
 
-export const handleSearchCourse = async (req, res) => {
+export const searchCourse = async (req, res) => {
   try {
     const { query = "", categories = [], sortByPrice = "" } = req.query;
     console.log(categories);
@@ -111,9 +110,34 @@ export const handleGetCreatorCourses = async (req, res) => {
   }
 }
 
-export const editCourse = async (req, res) => {
+export const handleGetCourseByCourseId = async (req, res) => {
   try {
     const courseId = req.params.courseId;
+    // console.log("MY courseID", courseId);
+
+
+    let course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({
+        message: "Course not found!"
+      })
+    }
+
+    return res.status(200).json({ course, message: "Course updated successfully." })
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to fetch course"
+    })
+  }
+}
+
+export const handleEditCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
     const { courseTitle, subTitle, description, category, courseLevel, coursePrice } = req.body;
     const thumbnail = req.file;
 
@@ -151,38 +175,41 @@ export const editCourse = async (req, res) => {
   }
 }
 
-export const getCourseById = async (req, res) => {
-  try {
-    const { courseId } = req.params;
+// export const getCourseById = async (req, res) => {
+//   try {
+//     const { courseId } = req.params;
 
-    const course = await Course.findById(courseId);
+//     const course = await Course.findById(courseId);
 
-    if (!course) {
-      return res.status(404).json({
-        message: "Course not found!"
-      })
-    }
-    return res.status(200).json({
-      course
-    })
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Failed to get course by id"
-    })
-  }
-}
+//     if (!course) {
+//       return res.status(404).json({
+//         message: "Course not found!"
+//       })
+//     }
+//     return res.status(200).json({
+//       course
+//     })
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({
+//       message: "Failed to get course by id"
+//     })
+//   }
+// }
 
-export const createLecture = async (req, res) => {
+export const handleCreateLecture = async (req, res) => {
   try {
     const { lectureTitle } = req.body;
     const { courseId } = req.params;
+    console.log("MY courseID", courseId);
+
 
     if (!lectureTitle || !courseId) {
       return res.status(400).json({
         message: "Lecture title is required"
       })
     };
+
 
     // create lecture
     const lecture = await Lecture.create({ lectureTitle });
@@ -206,7 +233,7 @@ export const createLecture = async (req, res) => {
   }
 }
 
-export const getCourseLecture = async (req, res) => {
+export const handleGetCourseLecture = async (req, res) => {
   try {
     const { courseId } = req.params;
     const course = await Course.findById(courseId).populate("lectures");
@@ -227,7 +254,7 @@ export const getCourseLecture = async (req, res) => {
   }
 }
 
-export const editLecture = async (req, res) => {
+export const handleEditLecture = async (req, res) => {
   try {
     const { lectureTitle, videoInfo, isPreviewFree } = req.body;
 

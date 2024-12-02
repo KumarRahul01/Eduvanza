@@ -15,10 +15,6 @@ import { Edit } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-const data = {
-  courses: Array.from({ length: 5 }).fill(0),
-};
-
 const CourseTable = () => {
   const [allCourses, setAllCourses] = useState([]);
 
@@ -26,7 +22,7 @@ const CourseTable = () => {
     const getAllPublishedCourses = async () => {
       try {
         const data = await axios.get("http://localhost:3000/api/course");
-        console.log(data?.data?.courses);
+        // console.log(data?.data?.courses);
         setAllCourses(data?.data?.courses);
       } catch (error) {
         console.log("error aa gya", error);
@@ -56,6 +52,7 @@ const CourseTable = () => {
           {allCourses.map((course, index) => (
             <TableRow key={index}>
               <TableCell className="font-medium">
+                <span className="font-sans">₹ </span>
                 {course?.coursePrice || "NA"}
               </TableCell>
               <TableCell>

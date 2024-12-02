@@ -7,6 +7,7 @@ dotenv.config()
 import connectDB from "./db/db.js";
 import userRoutes from "./routes/user.routes.js"
 import courseRoutes from "./routes/course.routes.js"
+import mediaRoutes from "./routes/media.routes.js"
 
 const app = express()
 const PORT = process.env.PORT;
@@ -22,8 +23,11 @@ app.use(cors({
   origin: "http://localhost:5173",
   credentials: true,
 }));
+
+// Routes Middelwares
 app.use("/api/user", userRoutes);
 app.use("/api/course", courseRoutes)
+app.use("/api/media", mediaRoutes)
 
 
 

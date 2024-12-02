@@ -18,15 +18,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AuthContext } from "@/contexts/AuthContext";
 import axios from "axios";
-import { Image, Loader2 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { contextType } from "react-quill";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const CourseTab = () => {
   const [isPageLoadded, SetIsPageLoadded] = useState(null);
+  const [isPublished, setIsPublished] = useState(false);
+  const [previewThumbnail, setPreviewThumbnail] = useState("");
 
   const [input, setInput] = useState({
     courseTitle: "",
@@ -41,7 +43,6 @@ const CourseTab = () => {
   const params = useParams();
   const courseId = params.courseId;
 
-  const [previewThumbnail, setPreviewThumbnail] = useState("");
   const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
@@ -83,6 +84,8 @@ const CourseTab = () => {
           coursePrice: courseData.coursePrice,
           courseThumbnail: courseData.courseThumbnail,
         });
+        setIsPublished(courseData.isPublished);
+        console.log(isPublished);
       } catch (error) {
         console.log("Error in fetching course by id", error);
       } finally {
@@ -91,6 +94,7 @@ const CourseTab = () => {
     };
 
     if (courseId) fetchCourseById();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId]);
 
   const updateCourseHandler = async () => {
@@ -126,6 +130,26 @@ const CourseTab = () => {
     }
   };
 
+  const togglePublishCourseHandler = async () => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:3000/api/course/${courseId}?publish=${isPublished}`,
+        {},
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("patch data", res.data);
+
+      setIsPublished(!isPublished);
+    } catch (error) {
+      console.log("Error in change status of course", error);
+    }
+  };
+
   const courseCategories = [
     "Next JS",
     "Data Science",
@@ -148,7 +172,7 @@ const CourseTab = () => {
   if (!isPageLoadded)
     return (
       <>
-        <div className="h-screen w-full flex items-center justify-center">
+        <div className="mt-60 w-full flex items-center justify-center">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
       </>
@@ -164,17 +188,9 @@ const CourseTab = () => {
           </CardDescription>
         </div>
         <div className="space-x-2">
-          {/* <Button
-            disabled={courseByIdData?.course.lectures.length === 0}
-            variant="outline"
-            onClick={() =>
-              publishStatusHandler(
-                courseByIdData?.course.isPublished ? "false" : "true"
-              )
-            }
-          >
-            {courseByIdData?.course.isPublished ? "Unpublished" : "Publish"}
-          </Button> */}
+          <Button variant="outline" onClick={togglePublishCourseHandler}>
+            {isPublished ? "Unpublish" : "Publish"}
+          </Button>
           <Button>Remove Course</Button>
         </div>
       </CardHeader>

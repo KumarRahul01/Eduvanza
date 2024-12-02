@@ -16,13 +16,16 @@ const url = process.env.MONGODB_URI;
 // Connecting to database
 connectDB(url);
 
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+}
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
+app.use(cors(corsOptions));
 
 // Routes Middelwares
 app.use("/api/user", userRoutes);

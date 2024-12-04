@@ -13,6 +13,11 @@ import { AuthContext } from "./contexts/AuthContext";
 import { useContext } from "react";
 import CreateLecture from "./pages/admin/Lectures/createLecture";
 import EditLecture from "./pages/admin/Lectures/EditLecture";
+import CourseDetails from "./pages/student/courseDetails";
+import Demo from "./components/Demo";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFailed from "./pages/PaymentFailed";
+import Checkout from "./components/Checkout";
 
 const App = () => {
   const { userDetails } = useContext(AuthContext);
@@ -27,6 +32,14 @@ const App = () => {
           <Route path="/signup" element={<Login />} />
           <Route path="/my-learning" element={<MyLearning />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/course-detail/:courseId" element={<CourseDetails />} />
+          <Route
+            path="/course-detail/:courseId/checkout"
+            element={<Checkout />}
+          />
+          <Route path="/demo" element={<Demo />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
 
           {/* Admin Routes */}
           <Route

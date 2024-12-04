@@ -37,8 +37,10 @@ const Navbar = () => {
     }
   }, [isLoggedIn, fetchProfileData]);
 
-  // Logout Login
+  // Logout Handler
   const logoutHandler = async () => {
+    console.log("click logout btn");
+
     try {
       await axios.get("http://localhost:3000/api/user/logout");
       console.log("Logout Successfully!");
@@ -103,7 +105,10 @@ const Navbar = () => {
                   </DropdownMenuItem>
                   {userDetails.role !== "Student" ? (
                     <>
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={logoutHandler}
+                      >
                         Log out
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
@@ -123,6 +128,7 @@ const Navbar = () => {
                   ) : (
                     <>
                       <DropdownMenuSeparator />
+
                       <DropdownMenuItem
                         className="cursor-pointer"
                         onClick={logoutHandler}

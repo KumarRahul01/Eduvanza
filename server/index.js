@@ -4,10 +4,14 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config()
 
+import SHA256 from 'crypto-js/sha256.js';
+import axios from 'axios';
+
 import connectDB from "./db/db.js";
 import userRoutes from "./routes/user.routes.js"
 import courseRoutes from "./routes/course.routes.js"
 import mediaRoutes from "./routes/media.routes.js"
+import paymentRoutes from "./routes/coursePurchase.routes.js"
 
 const app = express()
 const PORT = process.env.PORT;
@@ -31,11 +35,15 @@ app.use(cors(corsOptions));
 app.use("/api/user", userRoutes);
 app.use("/api/course", courseRoutes)
 app.use("/api/media", mediaRoutes)
+app.use("/api/payment", paymentRoutes);
 
 
 
 
 app.get("/", (req, res) => res.status(200).json({ msg: "Message from Express" }));
+
+
+
 
 app.listen(PORT, () => {
   console.log(

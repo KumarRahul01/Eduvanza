@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
+import { MdDelete } from "react-icons/md";
+
 // import {
 //   useEditLectureMutation,
 //   useGetLectureByIdQuery,
@@ -27,11 +29,11 @@ const LectureTab = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [lectureTitle, setLectureTitle] = useState("");
   const [uploadVideInfo, setUploadVideoInfo] = useState(null);
-  // const [isVideoLoading, setIsVideoLoading] = useState(false);
   const [isFree, setIsFree] = useState(false);
   const [mediaProgress, setMediaProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [lectureData, setLectureData] = useState({});
+  const [videoURL, setVideoURL] = useState("");
 
   // Params
   const params = useParams();
@@ -88,7 +90,7 @@ const LectureTab = () => {
       // console.log("mtDta", myData);
 
       if (res) {
-        // console.log("Lecture Updated", res);
+        console.log("Lecture Updated", res);
         toast.success("Lecture Updated");
         navigate(-1);
       }
@@ -111,15 +113,16 @@ const LectureTab = () => {
   };
 
   const fetchLectureDetails = async () => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const res = axios.get(
         `http://localhost:3000/api/course/lecture/${lectureId}`
       );
       const data = await res;
-      // console.log("data", data);
-      setLectureData(data?.data.lecture);
       setIsLoading(false);
+      setLectureData(data?.data.lecture);
+      setIsFree(data?.data.lecture.isPreviewFree);
+      setVideoURL(data?.data.lecture.videoUrl);
     } catch (error) {
       console.log("Error in fetching lecture details", error);
     }
@@ -141,18 +144,21 @@ const LectureTab = () => {
     );
 
   return (
-    <Card>
+    <Card className="my-8">
       <CardHeader className="flex justify-between">
-        <div>
-          <CardTitle>Edit Lecture</CardTitle>
-          <CardDescription>
-            Make changes and click save when done.
-          </CardDescription>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="destructive" onClick={removeLectureHandler}>
-            Remove Lecture
-          </Button>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Edit Lecture</CardTitle>
+            <CardDescription className="my-2">
+              Make changes and click save when done.
+            </CardDescription>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="destructive" onClick={removeLectureHandler}>
+              <MdDelete size={"1.5rem"} />
+              <span>Remove Lecture</span>
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -161,26 +167,49 @@ const LectureTab = () => {
           <Input
             value={lectureData ? lectureData.lectureTitle : lectureTitle}
             onChange={(e) => setLectureTitle(e.target.value)}
+            className="mt-1"
             type="text"
             placeholder="Ex. Introduction to Javascript"
           />
         </div>
-        <div className="my-5">
-          <Label>
-            Video <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            type="file"
-            accept="video/*"
-            onChange={fileChangeHandler}
-            placeholder="Ex. Introduction to Javascript"
-            className="w-fit"
-          />
-        </div>
+        {videoURL ? (
+          <div className="my-6">
+            <Label htmlFor="videoPlayer">Uploaded Video</Label>
+            <video
+              name="videoPlayer"
+              controls
+              className="w-[28rem] aspect-video object-cover mt-1 border  rounded-md text-xs"
+              src={videoURL}
+            />
+            <div className="my-5">
+              <Label>Upload New Video</Label>
+              <Input
+                type="file"
+                accept="video/*"
+                onChange={fileChangeHandler}
+                placeholder="Ex. Introduction to Javascript"
+                className="w-fit"
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="my-5">
+            <Label>
+              Upload Video <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              type="file"
+              accept="video/*"
+              onChange={fileChangeHandler}
+              placeholder="Ex. Introduction to Javascript"
+              className="w-fit"
+            />
+          </div>
+        )}
         <div className="flex items-center space-x-2 my-5">
           <Switch
-            checked={lectureData ? lectureData.isPreviewFree : isFree}
-            onCheckedChange={setIsFree}
+            checked={isFree}
+            onCheckedChange={() => setIsFree(!isFree)}
             id="airplane-mode"
           />
           <Label htmlFor="airplane-mode">Is this video FREE</Label>

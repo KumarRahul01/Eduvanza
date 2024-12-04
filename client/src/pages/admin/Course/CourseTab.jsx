@@ -21,14 +21,15 @@ import {
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { contextType } from "react-quill";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const CourseTab = () => {
   const [isPageLoadded, SetIsPageLoadded] = useState(null);
-  const [isPublished, setIsPublished] = useState(false);
   const [previewThumbnail, setPreviewThumbnail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPublishButton, setShowPublishButton] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
 
   const [input, setInput] = useState({
     courseTitle: "",
@@ -38,6 +39,7 @@ const CourseTab = () => {
     courseLevel: "",
     coursePrice: "",
     courseThumbnail: "",
+    isPublished: "",
   });
 
   const params = useParams();
@@ -75,6 +77,7 @@ const CourseTab = () => {
         );
         const courseData = response.data.course;
         SetIsPageLoadded(true);
+        setIsPublished(courseData.isPublished);
         setInput({
           courseTitle: courseData.courseTitle,
           subTitle: courseData.subTitle,
@@ -85,7 +88,9 @@ const CourseTab = () => {
           courseThumbnail: courseData.courseThumbnail,
         });
         setIsPublished(courseData.isPublished);
-        console.log(isPublished);
+        const verifyShowPublishBtn =
+          courseData.lectures.length > 0 ? true : false;
+        setShowPublishButton(verifyShowPublishBtn);
       } catch (error) {
         console.log("Error in fetching course by id", error);
       } finally {
@@ -122,7 +127,7 @@ const CourseTab = () => {
       );
       console.log("Updated:", data.data.course);
       toast.success("Course details updated successfully");
-      navigate(-1);
+      navigate(`lecture`);
     } catch (error) {
       console.log("Error in Updating course", error);
     } finally {
@@ -131,29 +136,44 @@ const CourseTab = () => {
   };
 
   const togglePublishCourseHandler = async () => {
-    const formData = new FormData();
-    if (input.isPublished) {
-      formData.append("published", input.isPublished);
-    }
     try {
+      const newPublishStatus = !isPublished; // Toggle the current status
       const res = await axios.put(
-        `http://localhost:3000/api/course/${courseId}/course/?publish=${isPublished}`,
-        formData, // No body required
+        `http://localhost:3000/api/course/${courseId}/course/?publish=${newPublishStatus}`,
+        { isPublished: newPublishStatus }, // Update the backend
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        // Update the local state based on the successful response
+        setIsPublished(newPublishStatus);
+        navigate("/admin/course");
+        toast.success(
+          `Course is ${newPublishStatus ? "Published" : "Unpublished"}`
+        );
+      } else {
+        throw new Error("Failed to update publish status");
+      }
+    } catch (error) {
+      console.log("Error in changing course status", error);
+      toast.error("Failed to update the publish status");
+    }
+  };
+
+  const removeCourseHandler = async () => {
+    try {
+      const course = await axios.delete(
+        `http://localhost:3000/api/course/${courseId}`,
         {
           withCredentials: true,
         }
       );
-      console.log("Response data", res.data);
-      setIsPublished(!isPublished);
-
-      if (isPublished) {
-        toast.success("Course is published");
-      } else {
-        toast.success("Course is Unpublished");
-      }
-      // Update the state to reflect the new publish status
+      console.log("res", course);
+      toast.success("Course deleted successfully");
+      navigate("/admin/course");
     } catch (error) {
-      console.log("Error in changing course status", error);
+      console.log("Error in removing Course", error);
+      toast.success("Error in deleting course");
     }
   };
 
@@ -174,13 +194,11 @@ const CourseTab = () => {
     "CSS",
   ];
 
-  const [isLoading, setIsLoading] = useState(false);
-
   if (!isPageLoadded)
     return (
       <>
         <div className="mt-60 w-full flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin" />
+          <Loader2 className="h-12 w-12 animate-spin" />
         </div>
       </>
     );
@@ -190,19 +208,21 @@ const CourseTab = () => {
       <CardHeader className="flex flex-row justify-between">
         <div>
           <CardTitle>Basic Course Information</CardTitle>
-          <CardDescription>
+          <CardDescription className="my-2">
             Make changes to your courses here. Click save when you&apos;re done.
           </CardDescription>
         </div>
         <div className="space-x-2">
-          <Button variant="outline" onClick={togglePublishCourseHandler}>
-            {isPublished ? "Publish" : "Unpublish"}
-          </Button>
-          <Button>Remove Course</Button>
+          {showPublishButton && (
+            <Button variant="outline" onClick={togglePublishCourseHandler}>
+              {isPublished ? "Unpublish" : "Publish"}
+            </Button>
+          )}
+          <Button onClick={removeCourseHandler}>Remove Course</Button>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4 mt-5">
+        <div className="space-y-4 mt-4">
           <div>
             <Label>Title</Label>
             <Input
@@ -300,7 +320,7 @@ const CourseTab = () => {
             ) : (
               <img
                 src={input.courseThumbnail}
-                className="w-[28rem] aspect-video object-cover my-6 border  rounded-md text-xs"
+                className="w-[28rem] aspect-video object-cover my-6 border rounded-md text-xs"
                 alt="No thumbnail found, please upload"
               />
             )}

@@ -1,27 +1,49 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Course from "./Course";
+import axios from "axios";
 
 const Courses = () => {
-  const [isloading, setIsLoading] = useState(false);
+  const [isloading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
+
+  const fetchAllCourses = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/course/published-courses`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("Response", res);
+      setData(res.data.courses);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error in fetching courses", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllCourses();
+  }, []);
 
   return (
     // Course Container
     <div>
       <div className="text-center mt-12 mb-2">
-        <h1 className="text-3xl font-extrabold secFont">Our Courses</h1>
+        <h1 className="text-3xl font-semibold">Our Courses</h1>
       </div>
       {/* Individual Course Container */}
       {isloading ? (
         <div className="flex items-center justify-center flex-wrap gap-8 mb-20">
-          {Array.from({ length: 8 }).map((_, index) => {
+          {data.map((_, index) => {
             return <MySkeleton key={index} />;
           })}
         </div>
       ) : (
         <div className="flex items-center justify-center flex-wrap gap-8 mb-20">
-          {Array.from({ length: 8 }).map((_, index) => {
-            return <Course key={index} />;
+          {data.map((course, index) => {
+            return <Course key={index} courseDetails={course} />;
           })}
         </div>
       )}

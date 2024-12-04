@@ -25,6 +25,7 @@ const CreateLecture = () => {
         `http://localhost:3000/api/course/${courseId}/lecture`,
         { withCredentials: true }
       );
+      setLoading(false);
       setLectureData(res.data.lectures);
     } catch (error) {
       setLectureError("Failed to load lectures.");
@@ -32,8 +33,6 @@ const CreateLecture = () => {
         "Fetch Lectures Error:",
         error.response?.data?.error || error.message
       );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -73,12 +72,11 @@ const CreateLecture = () => {
   return (
     <div className="flex-1 mx-10">
       <div className="mb-4">
-        <h1 className="font-bold text-xl">
-          Let’s add a lecture. Add some basic details for your new course.
+        <h1 className="font-bold text-xl my-2">
+          Let’s add a lecture, Create lectures for your course
         </h1>
-        <p className="text-sm">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus,
-          laborum!
+        <p className="text-sm my-2">
+          Add some basic details for your new course.
         </p>
       </div>
       <div className="space-y-4">
@@ -88,31 +86,32 @@ const CreateLecture = () => {
             type="text"
             value={lectureTitle}
             onChange={(e) => setLectureTitle(e.target.value)}
-            placeholder="Your Lecture Name"
+            placeholder="Eg: Introduction"
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={() => navigate(`/admin/course/${courseId}`)}
-          >
-            Back To Course
-          </Button>
-          <Button disabled={loading} onClick={createLectureHandler}>
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </>
-            ) : (
-              "Create Lecture"
-            )}
-          </Button>
-        </div>
+        {!loading && (
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              onClick={() => navigate(`/admin/course/${courseId}`)}
+            >
+              Back To Course
+            </Button>
+
+            <Button disabled={loading} onClick={createLectureHandler}>
+              Create Lecture
+            </Button>
+          </div>
+        )}
         {/* Display the lectures */}
-        <div className="mt-10">
+        <div className="mt-20">
           {loading && lectureData.length === 0 ? (
-            <p>Loading lectures...</p>
+            <>
+              <div className="flex items-center gap-2">
+                <p>Loading lectures...</p>
+                <Loader2 className="w-4 h-4 animate-spin" />
+              </div>
+            </>
           ) : lectureError ? (
             <p>{lectureError}</p>
           ) : lectureData.length === 0 ? (

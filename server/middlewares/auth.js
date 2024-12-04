@@ -13,6 +13,7 @@ export const IsAuthenticated = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // Attach the decoded user information to the request object
     req.userId = decoded.id;  // Assuming the token contains userId in the paload
+
     next()
 
   } catch (error) {

@@ -24,7 +24,7 @@ const courseSchema = new mongoose.Schema({
   enrolledStudents: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'user'
+      ref: "user"
     }
   ],
   lectures: [
@@ -35,7 +35,7 @@ const courseSchema = new mongoose.Schema({
   ],
   creator: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: "user"
   },
   isPublished: {
     type: Boolean,

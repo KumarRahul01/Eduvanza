@@ -87,15 +87,16 @@ export const handleUserLogin = async (req, res) => {
 
 export const handleUserLogout = async (req, res) => {
   try {
-    res.cookie("uid", "", {
-      maxAge: 0
-    });
+    // Clear the cookie without specifying a path
+    res.clearCookie("uid");
+
     return res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     console.error("User Logout error:", error);
     res.status(500).json({ error: "Failed to logout" });
   }
 };
+
 
 
 export const handleGetUserProfile = async (req, res) => {

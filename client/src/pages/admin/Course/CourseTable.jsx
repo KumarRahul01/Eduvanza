@@ -9,19 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AuthContext } from "@/contexts/AuthContext";
 import axios from "axios";
 import { Edit } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 const CourseTable = () => {
   const [allCourses, setAllCourses] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getAllPublishedCourses = async () => {
       try {
-        const data = await axios.get("http://localhost:3000/api/course");
+        const data = await axios.get("http://localhost:3000/api/course", {
+          withCredentials: true,
+        });
         // console.log(data?.data?.courses);
         setAllCourses(data?.data?.courses);
       } catch (error) {
@@ -31,7 +33,7 @@ const CourseTable = () => {
 
     getAllPublishedCourses();
   }, []);
-  const navigate = useNavigate();
+
   return (
     <div>
       <Button onClick={() => navigate(`/admin/course/create`)}>

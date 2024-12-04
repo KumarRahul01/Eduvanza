@@ -3,6 +3,7 @@ import { Lecture } from "../models/lecture.model.js";
 import { deleteMediaFromCloudinary, deleteVideoFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 
 export const handleCreateCourse = async (req, res) => {
+  const userId = req.userId;
   try {
     const { courseTitle, category } = req.body;
 
@@ -14,7 +15,7 @@ export const handleCreateCourse = async (req, res) => {
     const course = await Course.create({
       courseTitle,
       category,
-      creator: req.id
+      creator: userId
     });
 
     return res.status(201).json({
@@ -70,7 +71,7 @@ export const searchCourse = async (req, res) => {
   }
 }
 
-export const getPublishedCourse = async (_, res) => {
+export const handleGetPublishedCourse = async (_, res) => {
   try {
     const courses = await Course.find({ isPublished: true }).populate({ path: "creator", select: "name photoUrl" });
     if (!courses) {
@@ -91,21 +92,23 @@ export const getPublishedCourse = async (_, res) => {
 
 export const handleGetCreatorCourses = async (req, res) => {
   try {
-    const userId = req.id;
+    const userId = req.userId;
+
     const courses = await Course.find({ creator: userId });
-    if (!courses) {
+    if (!courses || courses.length === 0) {
       return res.status(404).json({
         courses: [],
         message: "Course not found"
       })
     };
     return res.status(200).json({
+      message: `Courses created by ${userId}`,
       courses,
     })
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "Failed to create course"
+      message: "Failed to get creator course"
     })
   }
 }
@@ -175,6 +178,48 @@ export const handleEditCourse = async (req, res) => {
   }
 }
 
+export const handleRemoveCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    const course = await Course.findByIdAndDelete(courseId)
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" })
+    }
+
+    // cb function to delete associated lectures
+    const deleteLectures = async (lectureId) => {
+      const lecture = await Lecture.findByIdAndDelete(lectureId);
+
+      if (!lecture) {
+        console.log(`Lecture not found: ${lectureId}`);
+        return;
+      }
+
+      // delete the lecture from couldinary as well
+      if (lecture.publicId) {
+        await deleteVideoFromCloudinary(lecture.publicId);
+      }
+    }
+
+    if (course.lectures.length > 0) {
+      for (const lectureId of course.lectures) {
+        await deleteLectures(lectureId);
+      }
+    }
+
+    // Final response
+    return res.status(200).json({
+      message: "Course and associated lectures deleted successfully!",
+      course
+    })
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Failed to remove course" })
+  }
+}
+
 export const handleRemoveLecture = async (req, res) => {
   try {
     const { lectureId } = req.params;
@@ -226,33 +271,10 @@ export const handleGetLectureById = async (req, res) => {
   }
 }
 
-// export const getCourseById = async (req, res) => {
-//   try {
-//     const { courseId } = req.params;
-
-//     const course = await Course.findById(courseId);
-
-//     if (!course) {
-//       return res.status(404).json({
-//         message: "Course not found!"
-//       })
-//     }
-//     return res.status(200).json({
-//       course
-//     })
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({
-//       message: "Failed to get course by id"
-//     })
-//   }
-// }
-
 export const handleCreateLecture = async (req, res) => {
   try {
     const { lectureTitle } = req.body;
     const { courseId } = req.params;
-    console.log("MY courseID", courseId);
 
 
     if (!lectureTitle || !courseId) {
@@ -346,14 +368,13 @@ export const handleEditLecture = async (req, res) => {
   }
 }
 
-// publish unpublish course logic
 
+// publish unpublish course logic
 
 export const handleTogglePublishCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
     const { publish } = req.query; // true, false
-    console.log("publish", publish);
 
 
     // Find the course by ID

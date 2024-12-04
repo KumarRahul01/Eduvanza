@@ -55,7 +55,7 @@ const AddCourse = () => {
 
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:3000/api/course", formData, {
+      await axios.post("http://localhost:3000/api/course/create", formData, {
         withCredentials: true,
       });
       setIsLoading(false);

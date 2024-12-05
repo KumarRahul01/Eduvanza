@@ -1,19 +1,61 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Filter from "./Filter";
 import SearchResult from "./SearchResult";
 import { AlertCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import axios from "axios";
 
 const SearchPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const query = "";
+  const [selectedCategories, setSelectedCatgories] = useState([]);
+  const [sortByPrice, setSortByPrice] = useState("");
+  const [searchData, setSearchData] = useState([]);
 
-  const handleFilterChange = () => {
-    console.log("hi");
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query");
+
+  const fetchSearchResult = async (finalURL) => {
+    setIsLoading(true);
+    try {
+      const data = await axios.get(`${finalURL}`);
+      // console.log("search Dta", data);
+      setSearchData(data.data?.courses);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("Error in searching results", error);
+    }
   };
+
+  useEffect(() => {
+    // baseURL
+    const baseURL = "http://localhost:3000/api/course/search?";
+
+    // Encode parameters
+    const encodedCategories = selectedCategories
+      .map(encodeURIComponent)
+      .join(",");
+    const params = new URLSearchParams({
+      query,
+      selectedCategories: encodedCategories,
+      sortByPrice,
+    }).toString();
+
+    const finalURL = baseURL + params;
+    console.log(finalURL);
+
+    fetchSearchResult(finalURL);
+  }, [selectedCategories, sortByPrice]);
+
+  const handleFilterChange = (categories, price) => {
+    setSelectedCatgories(categories);
+    setSortByPrice(price);
+  };
+
+  const isEmpty = !isLoading && searchData?.length === 0;
 
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-8">
@@ -22,7 +64,7 @@ const SearchPage = () => {
           result for {query || "Frontend Development"}
         </h1>
         <p>
-          Showing results for{""}
+          Showing results for{" "}
           <span className="text-blue-800 font-bold italic">
             {query || "Frontend Development"}
           </span>
@@ -35,10 +77,10 @@ const SearchPage = () => {
             Array.from({ length: 3 }).map((_, idx) => (
               <CourseSkeleton key={idx} />
             ))
-          ) : true ? (
+          ) : isEmpty ? (
             <CourseNotFound />
           ) : (
-            data?.courses?.map((course) => (
+            searchData.map((course) => (
               <SearchResult key={course._id} course={course} />
             ))
           )}

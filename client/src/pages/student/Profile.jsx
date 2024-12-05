@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Course from "./Course";
 import axios from "axios";
@@ -57,6 +57,25 @@ const Profile = () => {
       console.log("Error in updating user details", error.response.data.error);
     }
   };
+
+  const getUserProfile = async () => {
+    const fetchProfileData = async () => {
+      try {
+        const data = await axios.get("http://localhost:3000/api/user/profile");
+        console.log(data.data.user);
+      } catch (error) {
+        console.error(
+          "Error from frontend ContextAPI",
+          error.response.data.error
+        );
+      }
+    };
+    fetchProfileData();
+  };
+
+  useEffect(() => {
+    getUserProfile;
+  }, []);
 
   return (
     <div className="w-10/12 mx-auto my-10">

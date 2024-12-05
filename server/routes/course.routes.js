@@ -4,9 +4,9 @@ import upload from "../utils/multer.js";
 import { IsAuthenticated } from "../middlewares/auth.js";
 const router = express.Router();
 
+router.route("/").get(IsAuthenticated, handleGetCreatorCourses);
 router.route("/search").get(IsAuthenticated, handleSearchCourse);
 router.route("/published-courses").get(handleGetPublishedCourse);
-router.route("/").get(IsAuthenticated, handleGetCreatorCourses);
 router.route("/:courseId").get(handleGetCourseByCourseId)
 
 

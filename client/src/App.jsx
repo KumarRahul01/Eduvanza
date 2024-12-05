@@ -19,6 +19,7 @@ import PaymentFailed from "./pages/PaymentFailed";
 import Checkout from "./components/Checkout";
 import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
+import SearchResult from "./pages/student/SearchResult";
 
 const App = () => {
   const { userDetails } = useContext(AuthContext);

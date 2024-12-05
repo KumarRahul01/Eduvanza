@@ -2,6 +2,8 @@ import SHA256 from 'crypto-js/sha256.js';
 import axios from 'axios';
 import { CoursePurchase } from '../models/coursePurchase.model.js';
 import { Course } from '../models/course.model.js';
+import { Lecture } from '../models/lecture.model.js';
+import { User } from '../models/user.model.js';
 
 let myTransactionId;
 
@@ -98,24 +100,96 @@ export const handleCoursePaymentStatus = async (req, res) => {
     }
   }
 
+  // const updateCoursePurchase = async () => {
+  //   const myPurchase = await CoursePurchase.findOne({ paymentId: myTransactionId }).populate({ path: "courseId" });
+
+  //   if (!myPurchase) {
+  //     console.error("CoursePurchase not found for transaction ID:", myTransactionId);
+  //     return null; // Exit the function if no document is found
+  //   }
+
+  //   // Update the payment status to "completed"
+  //   const updatedData = { paymentStatus: "completed" };
+  //   const updatedCoursePurchase = await CoursePurchase.findByIdAndUpdate(
+  //     myPurchase._id, // Use the `_id` of the found document
+  //     { $set: updatedData }, // Use $set to update specific fields
+  //     { new: true } // Return the updated document
+  //   );
+
+  //   // console.log("Updated CoursePurchase:", updatedCoursePurchase);
+
+  //   // Make all lectures visible by setting `isPreviewFree` to true
+  //   if (myPurchase.courseId && myPurchase.courseId.lectures.length > 0) {
+  //     await Lecture.updateMany(
+  //       { _id: { $in: myPurchase.courseId.lectures } },
+  //       { $set: { isPreviewFree: true } }
+  //     );
+  //   }
+
+  //   await myPurchase.save();
+  //   // Update user's enrolledCourses
+  //   await User.findByIdAndUpdate(
+  //     myPurchase.userId,
+  //     { $addToSet: { enrolledCourses: myPurchase.courseId._id } }, // Add course ID to enrolledCourses
+  //     { new: true }
+  //   );
+
+  //   // Update course to add user ID to enrolledStudents
+  //   await Course.findByIdAndUpdate(
+  //     myPurchase.courseId._id,
+  //     { $addToSet: { enrolledStudents: myPurchase.userId } }, // Add user ID to enrolledStudents
+  //     { new: true }
+  //   );
+  // }
+
   const updateCoursePurchase = async () => {
-    const myPurchase = await CoursePurchase.findOne({ paymentId: myTransactionId });
+    const myPurchase = await CoursePurchase.findOne({ paymentId: myTransactionId }).populate({ path: "courseId" });
 
     if (!myPurchase) {
       console.error("CoursePurchase not found for transaction ID:", myTransactionId);
-      return null; // Exit the function if no document is found
+      return null;
     }
 
     // Update the payment status to "completed"
     const updatedData = { paymentStatus: "completed" };
     const updatedCoursePurchase = await CoursePurchase.findByIdAndUpdate(
-      myPurchase._id, // Use the `_id` of the found document
-      { $set: updatedData }, // Use $set to update specific fields
-      { new: true } // Return the updated document
+      myPurchase._id,
+      { $set: updatedData },
+      { new: true }
     );
 
-    // console.log("Updated CoursePurchase:", updatedCoursePurchase);
-  }
+    console.log("Updated CoursePurchase:", updatedCoursePurchase);
+
+    // Ensure lectures exist and are an array
+    if (myPurchase.courseId && myPurchase.courseId.lectures.length > 0) {
+      console.log("Lectures to update:", myPurchase.courseId.lectures);
+
+      // Convert lecture IDs to ObjectId if necessary
+
+      await Lecture.updateMany(
+        { _id: { $in: myPurchase.courseId.lectures } }, // Filter by lecture IDs
+        { $set: { isPreviewFree: true } }
+      );
+    } else {
+      console.error("No lectures found to update");
+    }
+
+    await myPurchase.save();
+
+    // Update user's enrolledCourses
+    await User.findByIdAndUpdate(
+      myPurchase.userId,
+      { $addToSet: { enrolledCourses: myPurchase.courseId._id } },
+      { new: true }
+    );
+
+    // Update course to add user ID to enrolledStudents
+    await Course.findByIdAndUpdate(
+      myPurchase.courseId._id,
+      { $addToSet: { enrolledStudents: myPurchase.userId } },
+      { new: true }
+    );
+  };
 
 
 
@@ -173,7 +247,7 @@ export const handleGetAllPurchasedCourse = async (_, res) => {
   try {
     const purchasedCourse = await CoursePurchase.find({
       paymentStatus: "completed",
-    }).populate("courseId");
+    }).populate("courseId").populate("userId");
     if (!purchasedCourse) {
       return res.status(404).json({
         purchasedCourse: [],

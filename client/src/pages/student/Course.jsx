@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 
 const Course = ({ courseDetails }) => {
+  console.log(courseDetails);
+
   return (
     <Link to={`/course-detail/${courseDetails._id}`}>
       <Card className="overflow-hidden w-72 h-[340px]  rounded-lg dark:bg-gray-800 bg-white shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 mt-10">

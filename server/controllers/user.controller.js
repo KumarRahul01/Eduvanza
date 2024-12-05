@@ -107,7 +107,7 @@ export const handleGetUserProfile = async (req, res) => {
       return res.status(401).json({ message: "User not loggedIn" })
     }
 
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId).select("-password").populate({ path: "enrolledCourses" });
     if (!user) {
       return res.status(404).json({ message: "Profile not found" })
     }

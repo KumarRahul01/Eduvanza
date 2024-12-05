@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
@@ -9,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
 
 const categories = [
   { id: "nextjs", label: "Next JS" },
@@ -24,10 +26,25 @@ const categories = [
   { id: "html", label: "HTML" },
 ];
 
-const Filter = () => {
-  const selectByPriceHandler = () => {};
+const Filter = ({ handleFilterChange }) => {
+  const [selectedCategories, setSelectedCatgories] = useState([]);
+  const [sortByPrice, setSortByPrice] = useState("");
 
-  const handleCategoryChange = () => {};
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCatgories((prevCategories) => {
+      const newCategories = prevCategories.includes(categoryId)
+        ? prevCategories.filter((id) => id !== categoryId)
+        : [...prevCategories, categoryId];
+
+      handleFilterChange(newCategories, sortByPrice);
+      return newCategories;
+    });
+  };
+
+  const selectByPriceHandler = (selectedValue) => {
+    setSortByPrice(selectedValue);
+    handleFilterChange(selectedCategories, selectedValue);
+  };
 
   return (
     <div className="w-full md:w-[20%]">

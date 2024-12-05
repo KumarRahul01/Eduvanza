@@ -12,6 +12,8 @@ import userRoutes from "./routes/user.routes.js"
 import courseRoutes from "./routes/course.routes.js"
 import mediaRoutes from "./routes/media.routes.js"
 import paymentRoutes from "./routes/coursePurchase.routes.js"
+import coursePurchaseNavigateRoutes from "./routes/coursePurchaseNavigate.routes.js"
+import courseProgressRoutes from "./routes/courseProgress.routes.js"
 
 const app = express()
 const PORT = process.env.PORT;
@@ -26,6 +28,8 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }
 
+// 14:26:54
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
@@ -36,7 +40,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/course", courseRoutes)
 app.use("/api/media", mediaRoutes)
 app.use("/api/payment", paymentRoutes);
-
+app.use("/api/details", coursePurchaseNavigateRoutes)
+app.use("/api/progress", courseProgressRoutes)
 
 
 

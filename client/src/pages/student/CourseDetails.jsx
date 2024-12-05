@@ -1,4 +1,4 @@
-import { BadgeInfo, Lock, PlayCircle } from "lucide-react";
+import { AlarmClock, BadgeInfo, Loader2, Lock, PlayCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -9,11 +9,94 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import BuyBtn from "@/components/BuyBtn";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
 
 const CourseDetails = () => {
+  const { isLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
   const params = useParams();
   const courseId = params.courseId;
+  const [isLoading, setIsLoading] = useState(false);
+  const [coursePurchased, setCoursePurchased] = useState(false);
+  const [videoUrl, setVideoUrl] = useState("");
+  const [courseData, setCourseData] = useState({
+    createdAt: "",
+    enrolledStudents: 0,
+    lectures: [],
+    videoUrl: "",
+  });
+
+  const fetchCourseOnLoad = async () => {
+    setIsLoading(true);
+    try {
+      const data = await axios.get(
+        `http://localhost:3000/api/course/${courseId}`
+      );
+      setIsLoading(false);
+      console.log("Response", data.data);
+      setCourseData(data.data?.course);
+      setVideoUrl(data.data?.course?.lectures[0].videoUrl);
+      if (data.data?.purchased === true) {
+        setCoursePurchased(true);
+      }
+    } catch (error) {
+      console.log("Error, courseDetails", error);
+    }
+  };
+
+  const fetchDeatilsWhenCoursePurchased = async () => {
+    setIsLoading(true);
+    try {
+      const data = await axios.get(
+        `http://localhost:3000/api/details/course/${courseId}`
+      );
+      setIsLoading(false);
+      console.log("Response", data.data);
+      setCourseData(data.data?.course);
+      setVideoUrl(data.data?.course?.lectures[0].videoUrl);
+      if (data.data?.purchased === true) {
+        setCoursePurchased(true);
+      }
+    } catch (error) {
+      console.log("Error, courseDetails, purchase", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      fetchCourseOnLoad();
+    } else {
+      fetchDeatilsWhenCoursePurchased();
+    }
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen flex translate-y-[40%] justify-center">
+        <Loader2 className="w-12 h-12 animate-spin" /> Loading ...
+      </div>
+    );
+  }
+
+  const randomPrice =
+    (Math.floor(
+      Math.random() *
+        (Math.floor((courseData.coursePrice + 500) / 100) -
+          Math.ceil((courseData.coursePrice + 100) / 100) +
+          1)
+    ) +
+      Math.ceil((courseData.coursePrice + 100) / 100)) *
+      100 +
+    100;
+
+  const handleContinueCourse = () => {
+    if (coursePurchased) {
+      navigate(`/course-progress/${courseId}`);
+    }
+  };
 
   return (
     <>
@@ -22,22 +105,28 @@ const CourseDetails = () => {
           {/* Course Details */}
           <div>
             <h1 className="text-3xl font-bold">
-              Master TailwindCSS In One Video
+              {courseData.courseTitle || "Master TailwindCSS In One Video"}
             </h1>
             <h3 className="text-lg font-medium my-3">
-              Build Scalable React App Using Rahul Kumar
+              {courseData.subTitle ||
+                "Build Scalable React App Using Rahul Kumar"}
             </h3>
             <h5 className="">
               Created By:{" "}
               <span className="underline underline-offset-2 italic text-indigo-400">
-                Rahul Kumar
+                {courseData.creator?.fullname || "Rahul Kumar"}
               </span>{" "}
             </h5>
             <div className="flex items-center gap-1 my-1">
               <BadgeInfo size={16} />
-              <p>Last Updated 11-11-2024</p>
+              <p>
+                Last Updated{" "}
+                {courseData.createdAt.split("T")[0] || "11 - 11 - 2024"}
+              </p>
             </div>
-            <p className="my-1">Enrolled Students: 10</p>
+            <p className="my-1">
+              Enrolled Students: {courseData.enrolledStudents.lecture || 8}
+            </p>
           </div>
         </div>
       </div>
@@ -45,14 +134,12 @@ const CourseDetails = () => {
       <div className="w-full md:w-10/12 mx-auto my-8 flex gap-32 flex-col md:flex-row items-center justify-between md:px-0 px-4">
         <div className="md:w-2/3 w-full px-0">
           <h1 className="text-3xl font-bold ">Description</h1>
-          <p className="text-sm my-8 ">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-            exercitationem laudantium molestiae, qui quas sapiente in voluptate
-            ea dolorem quam atque quidem odio autem nobis quo magni! Dolor,
-            totam quae. Lorem, ipsum dolor sit amet consectetur adipisicing
-            elit. Animi temporibus ratione corrupti quod omnis laboriosam eaque
-            minus debitis ducimus delectus!
-          </p>
+          <p
+            className="text-sm my-8"
+            dangerouslySetInnerHTML={{
+              __html: courseData.description || "Loading...",
+            }}
+          />
           <Card>
             <CardHeader>
               <CardTitle>Course Content</CardTitle>
@@ -61,7 +148,7 @@ const CourseDetails = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {[1, 2].map((lecture, index) => {
+              {courseData.lectures.map((lecture, index) => {
                 return (
                   <div key={index} className="flex items-center gap-2 mb-4">
                     {true ? (
@@ -71,27 +158,59 @@ const CourseDetails = () => {
                     ) : (
                       <Lock size={18} />
                     )}
-                    <p>Introduction</p>
+                    <p>{lecture.lectureTitle}</p>
                   </div>
                 );
               })}
             </CardContent>
           </Card>
         </div>
-        <div className="md:w-1/3 w-full">
-          <Card>
-            <CardContent className="p-4 flex flex-col justify-center">
-              <div className="aspect-video mb-4 ">react Player</div>
+        <div className="md:w-1/3 w-full h-fit">
+          <Card className="w-full py-4">
+            <CardContent className="w-full flex flex-col items-start justify-center">
+              <div className="w-full h-fit rounded-sm overflow-hidden mb-2">
+                <video
+                  className="aspect-video object-contain w-full"
+                  src={videoUrl || "https://via.placeholder.com/150"}
+                  controls
+                />
+              </div>
 
-              <p>Lecture Title</p>
-              <div className="w-full h-[3px] bg-gray-200"></div>
-              <p className="font-bold text-lg">Course Content</p>
+              <div className="w-full h-[2px] bg-gray-200 my-2"></div>
+              <p className="font-bold text-lg line-clamp-1">
+                {courseData.courseTitle || "Course Content"}
+              </p>
+              <p className="font-semibold mt-2">
+                {" "}
+                <span className="secFont">₹</span>{" "}
+                <span className="mr-2 ">{courseData.coursePrice}</span>
+                <span className="line-through">
+                  {courseData.coursePrice + randomPrice}
+                </span>
+              </p>
+              {!coursePurchased && (
+                <div className="text-red-600 text-sm flex justify-center items-center gap-1 my-2">
+                  {" "}
+                  <AlarmClock size={18} />{" "}
+                  <p>
+                    {" "}
+                    <span className="font-semibold">1 hour</span> left at this
+                    price!
+                  </p>
+                </div>
+              )}
             </CardContent>
-            <CardFooter className="px-4 justify-center">
-              {false ? (
-                <Button className="w-full">Contnue Course</Button>
+            <CardFooter className="">
+              {coursePurchased ? (
+                <Button className="w-full" onClick={handleContinueCourse}>
+                  Contnue Course
+                </Button>
               ) : (
-                <BuyBtn courseId={courseId} />
+                <BuyBtn
+                  isLoggedIn={isLoggedIn}
+                  courseId={courseId}
+                  price={courseData.coursePrice}
+                />
               )}
             </CardFooter>
           </Card>

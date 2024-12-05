@@ -30,7 +30,7 @@ export const handleCreateCourse = async (req, res) => {
   }
 }
 
-export const searchCourse = async (req, res) => {
+export const handleSearchCourse = async (req, res) => {
   try {
     const { query = "", categories = [], sortByPrice = "" } = req.query;
     console.log(categories);
@@ -67,7 +67,6 @@ export const searchCourse = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-
   }
 }
 
@@ -119,7 +118,7 @@ export const handleGetCourseByCourseId = async (req, res) => {
     // console.log("MY courseID", courseId);
 
 
-    let course = await Course.findById(courseId);
+    let course = await Course.findById(courseId).populate({ path: "lectures" }).populate({ path: "creator" });
 
     if (!course) {
       return res.status(404).json({
@@ -127,7 +126,7 @@ export const handleGetCourseByCourseId = async (req, res) => {
       })
     }
 
-    return res.status(200).json({ course, message: "Course updated successfully." })
+    return res.status(200).json({ course, message: "Course Get successfully.", coursePurchased: false })
 
   } catch (error) {
     console.log(error);
@@ -173,7 +172,7 @@ export const handleEditCourse = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: "Failed to create course"
+      message: "Failed to create course",
     })
   }
 }

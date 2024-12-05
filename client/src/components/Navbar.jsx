@@ -28,8 +28,13 @@ import { AuthContext } from "@/contexts/AuthContext";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const { fetchProfileData, userDetails, isLoggedIn, reloadPage } =
-    useContext(AuthContext);
+  const {
+    fetchProfileData,
+    userDetails,
+    isLoggedIn,
+    reloadPage,
+    setReloadPage,
+  } = useContext(AuthContext);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -44,7 +49,8 @@ const Navbar = () => {
     try {
       await axios.get("http://localhost:3000/api/user/logout");
       console.log("Logout Successfully!");
-      navigate(0);
+      setReloadPage(true);
+      navigate("/");
     } catch (error) {
       console.log("Error Logout Frontend", error);
     }

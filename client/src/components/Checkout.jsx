@@ -1,12 +1,15 @@
 import { ShoppingCart } from "lucide-react"; // Lucide React for icons
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const Checkout = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,18 +26,26 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    console.log("formdata", formData);
   };
 
   const params = useParams();
   const { courseId } = params;
 
-  const price = 299;
+  const priceString = localStorage.getItem("price");
+  const price = priceString ? JSON.parse(priceString) : null;
+  if (!price) {
+    navigate("/payment-failed");
+  }
+
+  useEffect(() => {
+    console.log("logged");
+  }, [price]);
 
   let data = {
     name: formData.name,
     email: formData.email,
-    amount: price,
+    amount: price || 499,
     phone: formData.phone,
     courseId: courseId,
     MID: "MID" + Date.now(),
@@ -42,22 +53,31 @@ const Checkout = () => {
   };
 
   const paymentHandler = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost:3000/api/payment/order",
-        data,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(res);
+    if (
+      formData.name === "" ||
+      formData.email === "" ||
+      formData.phone === ""
+    ) {
+      toast.error("All fields are required");
+    } else {
+      localStorage.removeItem("price");
+      try {
+        const res = await axios.post(
+          "http://localhost:3000/api/payment/order",
+          data,
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(res);
 
-      if (res.data.success === true) {
-        window.location.href =
-          res.data.data.instrumentResponse.redirectInfo.url;
+        if (res.data.success === true) {
+          window.location.href =
+            res.data.data.instrumentResponse.redirectInfo.url;
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -83,7 +103,9 @@ const Checkout = () => {
           <div className="space-y-4">
             {/* Name */}
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="name">
+                Name <span className="text-red-600">*</span>
+              </Label>
               <Input
                 id="name"
                 name="name"
@@ -96,7 +118,9 @@ const Checkout = () => {
 
             {/* Email */}
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">
+                Email <span className="text-red-600">*</span>
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -110,7 +134,9 @@ const Checkout = () => {
 
             {/* Phone */}
             <div>
-              <Label htmlFor="phone">Phone</Label>
+              <Label htmlFor="phone">
+                Phone <span className="text-red-600">*</span>
+              </Label>
               <Input
                 id="phone"
                 name="phone"
@@ -150,7 +176,10 @@ const CourseCard = ({ image, title, price }) => {
       />
       <div>
         <h2 className="text-lg font-bold text-gray-800">{title}</h2>
-        <p className="text-gray-600 mt-1">${price}</p>
+        <p className="text-gray-600 mt-1">
+          <span className="text-lg secFont mr-[2px]">₹</span>
+          {price}
+        </p>
       </div>
     </div>
   );

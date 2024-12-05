@@ -60,9 +60,9 @@ const Login = () => {
       await axios.post("http://localhost:3000/api/user/signup", signUpInput, {
         withCredentials: true,
       });
+      console.log(signUpInput);
       setErrorMsg("");
       toast.success("SignUp Successfully!");
-      setCurrentTab("login");
     } catch (error) {
       toast.error("SignUp Failed!");
       setErrorMsg(error.response?.data?.error || "SignUp Error");
@@ -202,19 +202,30 @@ const Login = () => {
               <p className="text-sm text-red-500 font-medium">{errorMsg}</p>
             </CardContent>
             <CardFooter>
-              <Button
-                disabled={isLoading}
-                onClick={() => handlerRegisteration("signup")}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
-                    Wait!
-                  </>
-                ) : (
-                  "Sign Up"
-                )}
-              </Button>
+              <div className="w-full flex flex-col gap-2 justify-center">
+                <Button
+                  disabled={isLoading}
+                  onClick={() => handlerRegisteration("signup")}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                      Wait!
+                    </>
+                  ) : (
+                    "Sign Up"
+                  )}
+                </Button>
+                <p className="text-xs">
+                  Already have an account{" "}
+                  <span
+                    className="text-blue-500 hover:underline underline-offset-2 font-medium cursor-pointer"
+                    onClick={() => setCurrentTab("login")}
+                  >
+                    Login Here
+                  </span>{" "}
+                </p>
+              </div>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -268,19 +279,30 @@ const Login = () => {
               <p className="text-sm text-red-500 font-medium">{errorMsg}</p>
             </CardContent>
             <CardFooter>
-              <Button
-                disabled={isLoading}
-                onClick={() => handlerRegisteration("login")}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
-                    Wait!
-                  </>
-                ) : (
-                  "Login"
-                )}
-              </Button>
+              <div className="w-full flex flex-col gap-2 justify-center">
+                <Button
+                  disabled={isLoading}
+                  onClick={() => handlerRegisteration("login")}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                      Wait!
+                    </>
+                  ) : (
+                    "Login"
+                  )}
+                </Button>
+                <p className="text-xs">
+                  Don&apos;t have an account{" "}
+                  <span
+                    className="text-blue-500 hover:underline underline-offset-2 font-medium cursor-pointer"
+                    onClick={() => setCurrentTab("signup")}
+                  >
+                    SignUp Here
+                  </span>{" "}
+                </p>
+              </div>
             </CardFooter>
           </Card>
         </TabsContent>

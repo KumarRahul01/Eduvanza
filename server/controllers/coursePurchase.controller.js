@@ -14,15 +14,20 @@ export const handleCoursePayment = async (req, res) => {
 
     myTransactionId = transactionId;
 
-    console.log({
-      name, email, phone, amount, userId, courseId, transactionId
-    });
+    // console.log({
+    //   name, email, phone, amount, userId, courseId, transactionId
+    // });
 
-    const coursePurchase = await CoursePurchase.create({
+    if (!name || !email || !phone) {
+      console.log("All fields are required")
+    }
+
+    // create CoursePurchase collection
+    await CoursePurchase.create({
       courseId, userId, amount, paymentId: transactionId
     })
 
-    console.log("coursePurchase mOdel", coursePurchase);
+    // console.log("coursePurchase mOdel", coursePurchase);
 
     // console.log("demo payment", req.userId);
     const merchantTransactionId = req.body.transactionId;
@@ -109,7 +114,7 @@ export const handleCoursePaymentStatus = async (req, res) => {
       { new: true } // Return the updated document
     );
 
-    console.log("Updated CoursePurchase:", updatedCoursePurchase);
+    // console.log("Updated CoursePurchase:", updatedCoursePurchase);
   }
 
 
@@ -119,6 +124,8 @@ export const handleCoursePaymentStatus = async (req, res) => {
 
     if (response.data.success === true) {
       updateCoursePurchase();
+      // console.log(response.data);
+
       const url = `${process.env.FRONTEND_URL}/payment-success`
       return res.redirect(url)
 
@@ -134,17 +141,20 @@ export const handleCoursePaymentStatus = async (req, res) => {
   })
 };
 
-export const getCourseDetailWithPurchaseStatus = async (req, res) => {
+export const handleGetCourseDetailWithPurchaseStatus = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const userId = req.id;
+    const userId = req.userId;
+
 
     const course = await Course.findById(courseId)
       .populate({ path: "creator" })
       .populate({ path: "lectures" });
 
+
+    // console.log("userId:", userId, "courseId:", courseId);
     const purchased = await CoursePurchase.findOne({ userId, courseId });
-    console.log(purchased);
+    // console.log("purchase", purchased);
 
     if (!course) {
       return res.status(404).json({ message: "course not found!" });
@@ -159,7 +169,7 @@ export const getCourseDetailWithPurchaseStatus = async (req, res) => {
   }
 };
 
-export const getAllPurchasedCourse = async (_, res) => {
+export const handleGetAllPurchasedCourse = async (_, res) => {
   try {
     const purchasedCourse = await CoursePurchase.find({
       paymentStatus: "completed",

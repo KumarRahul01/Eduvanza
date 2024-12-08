@@ -3,20 +3,27 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 
-const BuyBtn = ({ courseId, isLoggedIn, price }) => {
+const BuyBtn = ({ isLoggedIn, data }) => {
   const navigate = useNavigate();
 
-  localStorage.setItem("price", JSON.stringify(price));
+  localStorage.setItem(
+    "transactionData",
+    JSON.stringify({
+      coursePrice: data.coursePrice,
+      courseTitle: data.courseTitle,
+      courseThumbnail: data.courseThumbnail,
+    })
+  );
 
   const clickHandler = () => {
     if (!isLoggedIn) {
       navigate("/login");
       toast.error("Please login first");
     } else {
-      navigate(`/course-detail/${buyCourseId}/checkout`);
+      navigate(`/course-detail/${data._id}/checkout`);
+      console.log(data);
     }
   };
-  const buyCourseId = courseId;
 
   // { img, title, price }
 

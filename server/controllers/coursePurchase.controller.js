@@ -76,7 +76,6 @@ export const handleCoursePayment = async (req, res) => {
   }
 };
 
-
 // Verify payment
 export const handleCoursePaymentStatus = async (req, res) => {
 
@@ -247,7 +246,7 @@ export const handleGetAllPurchasedCourse = async (_, res) => {
   try {
     const purchasedCourse = await CoursePurchase.find({
       paymentStatus: "completed",
-    }).populate("courseId").populate("userId");
+    }).populate("courseId").populate("userId").select("-password");
     if (!purchasedCourse) {
       return res.status(404).json({
         purchasedCourse: [],

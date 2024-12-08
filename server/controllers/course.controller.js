@@ -30,46 +30,108 @@ export const handleCreateCourse = async (req, res) => {
   }
 }
 
+// export const handleSearchCourse = async (req, res) => {
+//   try {
+//     const { query = "", selectedCategories = [], sortByPrice = "" } = req.query;
+//     console.log(query, selectedCategories, sortByPrice);
+
+//     // create search query
+//     const searchCriteria = {
+//       isPublished: true,
+//       $or: [
+//         { courseTitle: { $regex: query, $options: "i" } },
+//         { subTitle: { $regex: query, $options: "i" } },
+//         { category: { $regex: query, $options: "i" } },
+//       ]
+//     }
+
+//     // if categories selected
+//     if (selectedCategories.length > 0) {
+//       searchCriteria.category = { $in: selectedCategories };
+//     }
+
+//     // define sorting order
+//     const sortOptions = {};
+//     if (sortByPrice === "low") {
+//       sortOptions.coursePrice = 1;//sort by price in ascending
+//     } else if (sortByPrice === "high") {
+//       sortOptions.coursePrice = -1; // descending
+//     }
+
+//     let courses = await Course.find(searchCriteria).populate({ path: "creator", select: "name photoUrl" }).sort(sortOptions);
+
+//     return res.status(200).json({
+//       success: true,
+//       courses: courses || []
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+
+//   }
+// }
+
+
 export const handleSearchCourse = async (req, res) => {
   try {
-    const { query = "", categories = [], sortByPrice = "" } = req.query;
-    console.log(categories);
+    // Extract and parse query parameters
+    const {
+      query = "",
+      selectedCategories = "",
+      sortByPrice = "",
+    } = req.query;
 
-    // create search query
+    // Decode and parse selectedCategories into an array
+    const categoriesArray =
+      selectedCategories && typeof selectedCategories === "string"
+        ? decodeURIComponent(selectedCategories).split(",")
+        : [];
+
+    // console.log("Search Query:", query);
+    // console.log("Selected Categories:", categoriesArray);
+    // console.log("Sort By Price:", sortByPrice);
+
+    // Build search criteria
     const searchCriteria = {
       isPublished: true,
       $or: [
         { courseTitle: { $regex: query, $options: "i" } },
         { subTitle: { $regex: query, $options: "i" } },
-        { category: { $regex: query, $options: "i" } },
-      ]
+      ],
+    };
+
+    // Add category filter if categories are selected
+    if (categoriesArray.length > 0) {
+      searchCriteria.category = { $in: categoriesArray };
     }
 
-    // if categories selected
-    if (categories.length > 0) {
-      searchCriteria.category = { $in: categories };
-    }
+    // Define sorting options
+    const sortOptions =
+      sortByPrice === "low"
+        ? { coursePrice: 1 } // Ascending
+        : sortByPrice === "high"
+          ? { coursePrice: -1 } // Descending
+          : {};
 
-    // define sorting order
-    const sortOptions = {};
-    if (sortByPrice === "low") {
-      sortOptions.coursePrice = 1;//sort by price in ascending
-    } else if (sortByPrice === "high") {
-      sortOptions.coursePrice = -1; // descending
-    }
+    // Fetch courses from the database
+    const courses = await Course.find(searchCriteria)
+      .populate({ path: "creator", select: "name photoUrl" })
+      .sort(sortOptions);
 
-    let courses = await Course.find(searchCriteria).populate({ path: "creator", select: "name photoUrl" }).sort(sortOptions);
-
+    // Respond with the fetched courses
     return res.status(200).json({
       success: true,
-      courses: courses || []
+      courses: courses || [],
     });
-
   } catch (error) {
-    console.log(error);
-
+    console.error("Error fetching courses:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching courses.",
+    });
   }
-}
+};
+
 
 export const handleGetPublishedCourse = async (_, res) => {
   try {

@@ -20,7 +20,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { BookCheck, Menu } from "lucide-react";
+import { BookCheck, Menu, User } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -85,7 +85,9 @@ const Navbar = () => {
                 <DropdownMenuTrigger>
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>
+                      <User size={24} />
+                    </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-44">
@@ -97,7 +99,9 @@ const Navbar = () => {
                     <NavLink
                       to="/my-learning"
                       className={({ isActive }) =>
-                        isActive ? "text-red-500 font-semibold" : "text-black"
+                        isActive
+                          ? "text-red-500 font-semibold w-full"
+                          : "text-black w-full"
                       }
                     >
                       My Learning
@@ -107,24 +111,26 @@ const Navbar = () => {
                     Teach On Eduvanza
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer">
-                    <Link to={"/profile"}>Edit Profile</Link>
+                    <Link className="w-full" to={"/profile"}>
+                      Edit Profile
+                    </Link>
                   </DropdownMenuItem>
                   {userDetails.role !== "Student" ? (
                     <>
                       <DropdownMenuItem
-                        className="cursor-pointer"
+                        className="cursor-pointer w-full"
                         onClick={logoutHandler}
                       >
                         Log out
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer">
+                      <DropdownMenuItem className="cursor-pointer w-full">
                         <NavLink
-                          to="/admin"
+                          to="/admin/dashboard"
                           className={({ isActive }) =>
                             isActive
-                              ? "text-red-500 font-semibold"
-                              : "text-black"
+                              ? "text-red-500 font-semibold w-full"
+                              : "text-black w-full"
                           }
                         >
                           Dashborad
@@ -136,7 +142,7 @@ const Navbar = () => {
                       <DropdownMenuSeparator />
 
                       <DropdownMenuItem
-                        className="cursor-pointer"
+                        className="cursor-pointer w-full"
                         onClick={logoutHandler}
                       >
                         Log Out
@@ -209,23 +215,25 @@ const MobileNavbar = () => {
             </div>
             <SheetDescription></SheetDescription>
             <div className="flex flex-col gap-6">
-              <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
-                <Link to={"/my-learning"}>My Learning</Link>
-              </div>
-              <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
-                <Link to={"/profile"}>Edit Profile</Link>
-              </div>
-              {isLoggedIn ? (
-                <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
-                  {userDetails.role !== "student" ? "Dashboard" : ""}
-                </div>
-              ) : (
-                ""
+              {isLoggedIn && (
+                <>
+                  <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
+                    <Link to={"/my-learning"}>My Learning</Link>
+                  </div>
+                  <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
+                    <Link to={"/profile"}>Edit Profile</Link>
+                  </div>
+                  <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
+                    {userDetails.role !== "Student" && (
+                      <Link to={"/admin/dashboard"}>Dashborad</Link>
+                    )}
+                  </div>
+                </>
               )}
               {isLoggedIn ? (
                 <Button onClick={logoutHandler}>Log Out</Button>
               ) : (
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 my-20">
                   <Button onClick={() => navigate("/signup")}>SignUp</Button>
                   <Button onClick={() => navigate("/login")}>Login</Button>
                 </div>

@@ -7,10 +7,11 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
+import { useTheme } from "./ThemeProvider";
 
 const DarkMode = () => {
   // TODO: Update Theme Functionality
-  const { setTheme } = "system";
+  const { setTheme } = useTheme();
 
   return (
     <>

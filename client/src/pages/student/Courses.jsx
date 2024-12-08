@@ -4,10 +4,11 @@ import Course from "./Course";
 import axios from "axios";
 
 const Courses = () => {
-  const [isloading, setIsLoading] = useState(true);
+  const [isloading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
 
   const fetchAllCourses = async () => {
+    setIsLoading(true);
     try {
       const res = await axios.get(
         `http://localhost:3000/api/course/published-courses`,
@@ -15,7 +16,7 @@ const Courses = () => {
           withCredentials: true,
         }
       );
-      console.log("Response", res);
+      // console.log("Response", res);
       setData(res.data.courses);
       setIsLoading(false);
     } catch (error) {
@@ -31,7 +32,7 @@ const Courses = () => {
     // Course Container
     <div>
       <div className="text-center mt-12 mb-2">
-        <h1 className="text-3xl font-semibold">Our Courses</h1>
+        <h1 className="text-3xl font-semibold ">Our Courses</h1>
       </div>
       {/* Individual Course Container */}
       {isloading ? (
@@ -55,7 +56,7 @@ export default Courses;
 
 const MySkeleton = () => {
   return (
-    <div className="w-72 h-80 bg-white shadow-md hover:shadow-lg transition-shadow rounded-lg overflow-hidden mt-10">
+    <div className="w-72 h-80 border shadow-md hover:shadow-lg transition-shadow rounded-lg overflow-hidden mt-10">
       <Skeleton className="w-full h-48" />
       <div className="px-5 py-4 space-y-3">
         <Skeleton className="h-6 w-3/4" />

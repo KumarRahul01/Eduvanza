@@ -262,7 +262,7 @@ const CourseTab = () => {
                   <SelectGroup>
                     <SelectLabel>Category</SelectLabel>
                     {courseCategories.map((courseName, index) => (
-                      <SelectItem value={courseName} key={index}>
+                      <SelectItem value={courseName.toLowerCase()} key={index}>
                         {courseName}
                       </SelectItem>
                     ))}

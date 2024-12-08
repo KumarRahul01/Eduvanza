@@ -36,7 +36,7 @@ const CourseDetails = () => {
         `http://localhost:3000/api/course/${courseId}`
       );
       setIsLoading(false);
-      console.log("Response", data.data);
+      // console.log("Response", data.data);
       setCourseData(data.data?.course);
       setVideoUrl(data.data?.course?.lectures[0].videoUrl);
       if (data.data?.purchased === true) {
@@ -54,7 +54,7 @@ const CourseDetails = () => {
         `http://localhost:3000/api/details/course/${courseId}`
       );
       setIsLoading(false);
-      console.log("Response", data.data);
+      // console.log("Response", data.data);
       setCourseData(data.data?.course);
       setVideoUrl(data.data?.course?.lectures[0].videoUrl);
       if (data.data?.purchased === true) {
@@ -107,7 +107,7 @@ const CourseDetails = () => {
             <h1 className="text-3xl font-bold">
               {courseData.courseTitle || "Master TailwindCSS In One Video"}
             </h1>
-            <h3 className="text-lg font-medium my-3">
+            <h3 className="my-3">
               {courseData.subTitle ||
                 "Build Scalable React App Using Rahul Kumar"}
             </h3>
@@ -125,14 +125,14 @@ const CourseDetails = () => {
               </p>
             </div>
             <p className="my-1">
-              Enrolled Students: {courseData.enrolledStudents.lecture || 8}
+              Enrolled Students: {courseData.enrolledStudents.length || 8}
             </p>
           </div>
         </div>
       </div>
       {/* Main Section */}
-      <div className="w-full md:w-10/12 mx-auto my-8 flex gap-32 flex-col md:flex-row items-center justify-between md:px-0 px-4">
-        <div className="md:w-2/3 w-full px-0">
+      <div className="w-full md:w-10/12 mx-auto my-8 flex md:gap-32 gap-20 flex-col md:flex-row justify-between md:px-0 px-4">
+        <div className="md:w-2/3 h-auto w-full">
           <h1 className="text-3xl font-bold ">Description</h1>
           <p
             className="text-sm my-8"
@@ -151,7 +151,7 @@ const CourseDetails = () => {
               {courseData.lectures.map((lecture, index) => {
                 return (
                   <div key={index} className="flex items-center gap-2 mb-4">
-                    {true ? (
+                    {lecture.isPreviewFree ? (
                       <span>
                         <PlayCircle size={18} />
                       </span>
@@ -185,7 +185,7 @@ const CourseDetails = () => {
                 <span className="secFont">₹</span>{" "}
                 <span className="mr-2 ">{courseData.coursePrice}</span>
                 <span className="line-through">
-                  {courseData.coursePrice + randomPrice}
+                  {courseData.coursePrice + randomPrice || 199}
                 </span>
               </p>
               {!coursePurchased && (
@@ -210,6 +210,7 @@ const CourseDetails = () => {
                   isLoggedIn={isLoggedIn}
                   courseId={courseId}
                   price={courseData.coursePrice}
+                  data={courseData}
                 />
               )}
             </CardFooter>

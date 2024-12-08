@@ -38,7 +38,8 @@ export const handleCoursePayment = async (req, res) => {
       merchantTransactionId,
       name: req.body.name,
       amount: req.body.amount * 100, // Convert to paise
-      redirectUrl: `${process.env.BACKEND_URL}/api/payment/status?id=${merchantTransactionId}`,
+      // redirectUrl: `${process.env.BACKEND_URL}/api/payment/status?id=${merchantTransactionId}`,
+      redirectUrl: `http://localhost:3000/api/payment/status?id=${merchantTransactionId}`,
       redirectMode: 'POST',
       mobileNumber: req.body.phone,
       paymentInstrument: {
@@ -199,12 +200,14 @@ export const handleCoursePaymentStatus = async (req, res) => {
       updateCoursePurchase();
       // console.log(response.data);
 
-      const url = `${process.env.FRONTEND_URL}/payment-success`
+      // const url = `${process.env.FRONTEND_URL}/payment-success`
+      const url = `http://localhost:5173/payment-success`
       return res.redirect(url)
 
 
     } else {
-      const url = `${process.env.FRONTEND_URL}/payment-failed`
+      // const url = `${process.env.FRONTEND_URL}/payment-failed`
+      const url = `http://localhost:5173/payment-failed`
       return res.redirect(url)
     }
 

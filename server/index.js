@@ -28,7 +28,6 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }
 
-// 14:26:54
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

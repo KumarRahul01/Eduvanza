@@ -80,7 +80,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
+    <div className="min-h-screen bg-gray-100 dark:bg-[#020817] flex flex-col items-center p-4">
       <div className="w-full max-w-lg">
         {/* Course Card */}
         <CourseCard
@@ -91,10 +91,10 @@ const Checkout = () => {
 
         {/* Checkout Form */}
         <form
-          className="bg-white shadow-md rounded-lg mt-6 p-6"
+          className="bg-white dark:bg-gray-900 dark:text-slate-100 shadow-md rounded-lg mt-6 p-6"
           onSubmit={handleSubmit}
         >
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-slate-100 mb-4">
             Enter Your Details
           </h2>
 
@@ -151,7 +151,7 @@ const Checkout = () => {
           <Button
             type="submit"
             variant="outline"
-            className="mt-6 w-full flex items-center justify-center bg-gray-100"
+            className="mt-6 w-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-950"
             onClick={paymentHandler}
           >
             <ShoppingCart className="mr-2 h-5 w-5 " />
@@ -166,14 +166,16 @@ const Checkout = () => {
 const CourseCard = ({ image, title, price }) => {
   // { image, title, price }
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 flex flex-row items-center space-x-4">
+    <div className="bg-white dark:bg-gray-900 dark:text-slate-100 shadow-md rounded-lg p-4 flex flex-row items-center space-x-4">
       <img
         src={image}
         alt={title}
         className="w-28 h-28 object-cover rounded-md"
       />
       <div>
-        <h2 className="text-lg md:text-2xl font-bold text-gray-800">{title}</h2>
+        <h2 className="text-lg md:text-2xl font-bold text-gray-800 dark:text-slate-100">
+          {title}
+        </h2>
         <p className="mt-1 font-semibold">
           <span className="text-lg secFont mr-1">₹</span>
           {price}

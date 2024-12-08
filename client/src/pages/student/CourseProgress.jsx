@@ -123,19 +123,19 @@ const CourseProgress = () => {
               "Master Namaste JavaScript: From Beginner to Pro"}
           </h1>
           <Button
-            className="hidden md:block"
+            className="hidden md:block dark:bg-gray-700 dark:hover:bg-gray-800 dark:text-white"
             onClick={
               completeCourseBtn ? handleIncompleteCourse : handleCompleteCourse
             }
             variant={courseProgress.completed ? "outline" : "default"}
           >
             {courseProgress.completed ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 ">
                 <CircleCheckBig size={24} />
                 <span>Completed</span>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 ">
                 <span>Mark as completed</span>
               </div>
             )}
@@ -173,9 +173,9 @@ const CourseProgress = () => {
                   (lecture, index) => (
                     <div
                       key={index}
-                      className={`flex items-center gap-2 my-2 border rounded-lg p-4 cursor-pointer hover:bg-gray-100 hover:scale-105 hover:shadow-lg transition-all duration-300 ${
+                      className={`flex items-center gap-2 my-2 border rounded-lg p-4 cursor-pointer  dark:hover:bg-gray-800 hover:bg-gray-100 hover:scale-105 hover:shadow-lg transition-all duration-300 ${
                         lecture._id === initialLecture._id
-                          ? "bg-gray-300"
+                          ? "bg-gray-300 dark:bg-gray-600"
                           : "bg-transparent"
                       }`}
                       onClick={() => handleSelectLecture(lecture)}

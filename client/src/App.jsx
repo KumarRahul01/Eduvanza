@@ -19,41 +19,106 @@ import PaymentFailed from "./pages/PaymentFailed";
 import Checkout from "./components/Checkout";
 import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
+import {
+  AdminRoutes,
+  AuthenticatedUser,
+  ProtectedRoutes,
+} from "./components/ProtectedRoutes";
 
 const App = () => {
-  const { userDetails } = useContext(AuthContext);
-
   return (
     <>
       <Navbar />
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Login />} />
-          <Route path="/my-learning" element={<MyLearning />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/course/search" element={<SearchPage />} />
           <Route path="/course-detail/:courseId" element={<CourseDetails />} />
+
+          {/* Routes With validations */}
           <Route
-            path="/course-detail/:courseId/checkout"
-            element={<Checkout />}
+            path="/login"
+            element={
+              <AuthenticatedUser>
+                <Login />
+              </AuthenticatedUser>
+            }
           />
+          <Route
+            path="/signup"
+            element={
+              <AuthenticatedUser>
+                {/* Redirect to login page on sighUp tab */}
+                <Login />
+              </AuthenticatedUser>
+            }
+          />
+          <Route
+            path="/my-learning"
+            element={
+              <ProtectedRoutes>
+                <MyLearning />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoutes>
+                <Profile />
+              </ProtectedRoutes>
+            }
+          />
+
           <Route
             path="/course-progress/:courseId"
-            element={<CourseProgress />}
+            element={
+              <ProtectedRoutes>
+                <CourseProgress />
+              </ProtectedRoutes>
+            }
           />
-          <Route path="/course/search" element={<SearchPage />} />
+          <Route
+            path="/course-detail/:courseId/checkout"
+            element={
+              <ProtectedRoutes>
+                <Checkout />
+              </ProtectedRoutes>
+            }
+          />
           <Route
             path="/course-progress/:courseId/lecture/:lectureId/views"
-            element={<CourseProgress />}
+            element={
+              <ProtectedRoutes>
+                <CourseProgress />
+              </ProtectedRoutes>
+            }
           />
-          <Route path="/payment-success" element={<PaymentSuccess />} />
-          <Route path="/payment-failed" element={<PaymentFailed />} />
+          <Route
+            path="/payment-success"
+            element={
+              <ProtectedRoutes>
+                <PaymentSuccess />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/payment-failed"
+            element={
+              <ProtectedRoutes>
+                <PaymentFailed />
+              </ProtectedRoutes>
+            }
+          />
 
           {/* Admin Routes */}
           <Route
             path="/admin"
-            element={<Sidebar name={userDetails.fullname} />}
+            element={
+              <AdminRoutes>
+                <Sidebar />
+              </AdminRoutes>
+            }
           >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="course" element={<CourseTable />} />

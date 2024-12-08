@@ -14,6 +14,7 @@ const RichTextEditor = ({ input, setInput }) => {
       // eslint-disable-next-line react/prop-types
       value={input.description}
       onChange={handleChange}
+      className="dark:text-slate-100"
     />
   );
 };

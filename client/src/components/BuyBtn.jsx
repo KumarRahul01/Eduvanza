@@ -30,9 +30,7 @@ const BuyBtn = ({ isLoggedIn, data }) => {
   return (
     <div className="w-full flex flex-col gap-4">
       <Button
-        // img={img}
-        // title={title}
-        // price={price}
+        className="dark:text-slate-100 dark:bg-gray-800 dark:hover:bg-gray-950 dark:hover:border font-semibold"
         onClick={clickHandler}
       >
         Buy Now

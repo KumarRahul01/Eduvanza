@@ -104,7 +104,7 @@ const AddCourse = () => {
                 <SelectLabel>Category</SelectLabel>
                 {courseCategories.map((courseName, index) => (
                   <SelectItem value={courseName.toLowerCase()} key={index}>
-                    {courseName}
+                    <div className="dark:text-slate-100">{courseName}</div>
                   </SelectItem>
                 ))}
               </SelectGroup>

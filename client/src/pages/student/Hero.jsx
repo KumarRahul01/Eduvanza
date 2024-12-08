@@ -41,7 +41,10 @@ const Hero = () => {
               placeholder="Search Courses Here"
             />
             <div className="absolute -right-2">
-              <Button type="submit" className="rounded-r-full h-10">
+              <Button
+                type="submit "
+                className="rounded-r-full h-11 dark:bg-black dark:hover:bg-gray-900 dark:text-slate-100"
+              >
                 Search
               </Button>
             </div>
@@ -51,7 +54,7 @@ const Hero = () => {
         {/* Explore Btn */}
         <div className="mb-6 md:mb-0">
           <Button
-            className="rounded-2xl"
+            className="rounded-2xl dark:bg-black dark:hover:bg-gray-900 dark:text-slate-100"
             onClick={() => navigate(`/course/search?query`)}
           >
             Explore Courses

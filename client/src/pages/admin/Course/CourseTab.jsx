@@ -227,6 +227,7 @@ const CourseTab = () => {
             <Label>Title</Label>
             <Input
               type="text"
+              className="dark:text-slate-100"
               name="courseTitle"
               value={input.courseTitle}
               onChange={changeEventHandler}
@@ -237,6 +238,7 @@ const CourseTab = () => {
             <Label>Subtitle</Label>
             <Input
               type="text"
+              className="dark:text-slate-100"
               name="subTitle"
               value={input.subTitle}
               onChange={changeEventHandler}
@@ -262,8 +264,12 @@ const CourseTab = () => {
                   <SelectGroup>
                     <SelectLabel>Category</SelectLabel>
                     {courseCategories.map((courseName, index) => (
-                      <SelectItem value={courseName.toLowerCase()} key={index}>
-                        {courseName}
+                      <SelectItem
+                        // className="dark:text-slate-100"
+                        value={courseName.toLowerCase()}
+                        key={index}
+                      >
+                        <div className="dark:text-slate-100">{courseName}</div>
                       </SelectItem>
                     ))}
                   </SelectGroup>
@@ -277,15 +283,24 @@ const CourseTab = () => {
                 onValueChange={selectCourseLevel}
                 value={input.courseLevel}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] dark:text-slate-100">
                   <SelectValue placeholder="Select a course level" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Course Level</SelectLabel>
-                    <SelectItem value="Beginner">Beginner</SelectItem>
-                    <SelectItem value="Medium">Medium</SelectItem>
-                    <SelectItem value="Advance">Advance</SelectItem>
+                    <SelectItem
+                      value="Beginner"
+                      className="dark:text-slate-100"
+                    >
+                      Beginner
+                    </SelectItem>
+                    <SelectItem value="Medium" className="dark:text-slate-100">
+                      Medium
+                    </SelectItem>
+                    <SelectItem value="Advance" className="dark:text-slate-100">
+                      Advance
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -297,8 +312,8 @@ const CourseTab = () => {
                 name="coursePrice"
                 value={input.coursePrice}
                 onChange={changeEventHandler}
+                className="dark:text-slate-100 w-fit"
                 placeholder="199"
-                className="w-fit"
               />
             </div>
           </div>
@@ -309,7 +324,7 @@ const CourseTab = () => {
               onChange={selectThumbnail}
               placeholder="Hello"
               accept="image/*"
-              className="w-fit"
+              className="w-fit dark:text-slate-100"
             />
             {previewThumbnail ? (
               <img
@@ -329,7 +344,11 @@ const CourseTab = () => {
             <Button onClick={() => navigate("/admin/course")} variant="outline">
               Cancel
             </Button>
-            <Button disabled={isLoading} onClick={updateCourseHandler}>
+            <Button
+              disabled={isLoading}
+              onClick={updateCourseHandler}
+              className="dark:hover:bg-gray-400"
+            >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

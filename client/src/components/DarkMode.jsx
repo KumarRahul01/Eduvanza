@@ -23,23 +23,23 @@ const DarkMode = () => {
             <span className="sr-only">Toggle theme</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="border mr-2 border-gray-300 p-3 bg-white rounded-md my-4 shadow-lg">
+        <DropdownMenuContent className="border mr-2 border-gray-300 p-3 bg-white dark:bg-gray-900 dark:text-slate-100 rounded-md my-4 shadow-lg">
           <DropdownMenuItem
-            className="px-4 outline-none py-1 my-1 text-sm cursor-pointer hover:bg-slate-100 transition-all duration-150 rounded-md"
+            className="px-4 outline-none py-1 my-1 text-sm cursor-pointer hover:bg-slate-100 dark:hover:text-gray-900 dark:hover:font-medium transition-all duration-150 rounded-md"
             onClick={() => setTheme("light")}
           >
             Light
           </DropdownMenuItem>
           <DropdownMenuSeparator className="h-[1px] bg-[#eee]" />
           <DropdownMenuItem
-            className="px-4 outline-none py-1 my-1 text-sm cursor-pointer hover:bg-slate-100 transition-all duration-150 rounded-md"
+            className="px-4 outline-none py-1 my-1 text-sm cursor-pointer hover:bg-slate-100 dark:hover:text-gray-900 dark:hover:font-medium transition-all duration-150 rounded-md"
             onClick={() => setTheme("dark")}
           >
             Dark
           </DropdownMenuItem>
           <DropdownMenuSeparator className="h-[1px] bg-[#eee]" />
           <DropdownMenuItem
-            className="px-4 outline-none py-1 my-1 text-sm cursor-pointer hover:bg-slate-100 transition-all duration-150 rounded-md"
+            className="px-4 outline-none py-1 my-1 text-sm cursor-pointer hover:bg-slate-100 dark:hover:text-gray-900 dark:hover:font-medium transition-all duration-150 rounded-md"
             onClick={() => setTheme("system")}
           >
             System

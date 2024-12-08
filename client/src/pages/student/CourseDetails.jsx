@@ -75,7 +75,7 @@ const CourseDetails = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-screen flex translate-y-[40%] justify-center">
+      <div className="w-full h-screen flex -my-20 items-center justify-center">
         <Loader2 className="w-12 h-12 animate-spin" /> Loading ...
       </div>
     );
@@ -135,7 +135,7 @@ const CourseDetails = () => {
         <div className="md:w-2/3 h-auto w-full">
           <h1 className="text-3xl font-bold ">Description</h1>
           <p
-            className="text-sm my-8"
+            className="text-sm my-8 dark:text-gray-400"
             dangerouslySetInnerHTML={{
               __html: courseData.description || "Loading...",
             }}
@@ -150,7 +150,10 @@ const CourseDetails = () => {
             <CardContent>
               {courseData.lectures.map((lecture, index) => {
                 return (
-                  <div key={index} className="flex items-center gap-2 mb-4">
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 mb-4 dark:text-gray-400"
+                  >
                     {lecture.isPreviewFree ? (
                       <span>
                         <PlayCircle size={18} />
@@ -202,7 +205,10 @@ const CourseDetails = () => {
             </CardContent>
             <CardFooter className="">
               {coursePurchased ? (
-                <Button className="w-full" onClick={handleContinueCourse}>
+                <Button
+                  className="w-full dark:text-slate-100 dark:bg-gray-800 dark:hover:bg-gray-950 dark:hover:border font-semibold"
+                  onClick={handleContinueCourse}
+                >
                   Contnue Course
                 </Button>
               ) : (

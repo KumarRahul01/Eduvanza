@@ -69,11 +69,11 @@ const Navbar = () => {
       <div className="w-full h-16 px-12 dark:bg-[#03021F] dark:text-[#FEFFFE] dark:border-b-gray-800 bg-white shadow-lg hidden md:flex items-center justify-between">
         {/* Logo Section */}
         <div
-          className="flex items-center gap-2 cursor-pointer"
+          className="flex items-center gap-2 cursor-pointer dark:hover:text-gray-400"
           onClick={() => navigate("/")}
         >
           <h1>
-            <BookCheck />
+            <BookCheck className="" />
           </h1>
           <h1 className="font-bold text-3xl">Eduvanza</h1>
         </div>
@@ -100,20 +100,38 @@ const Navbar = () => {
                       to="/my-learning"
                       className={({ isActive }) =>
                         isActive
-                          ? "text-red-500 font-semibold w-full"
-                          : "text-black w-full"
+                          ? "text-red-500 font-semibold w-full dark:text-red-500"
+                          : "text-black w-full dark:text-slate-100"
                       }
                     >
                       My Learning
                     </NavLink>
                   </DropdownMenuItem>
+
+                  {/* Teach On Eduvanza */}
+                  {/* <DropdownMenuItem className="cursor-pointer">
+                    <NavLink
+                      to={"#"}
+                      // className={({ isActive }) =>
+                      //   isActive
+                      //     ? "font-semibold w-full "
+                      //     : "text-black w-full dark:text-slate-100"
+                      // }
+                    >
+                      Teach On Eduvanza
+                    </NavLink>
+                  </DropdownMenuItem> */}
                   <DropdownMenuItem className="cursor-pointer">
-                    Teach On Eduvanza
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer">
-                    <Link className="w-full" to={"/profile"}>
+                    <NavLink
+                      to={"/profile"}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-red-500 font-semibold w-full dark:text-red-500"
+                          : "text-black w-full dark:text-slate-100"
+                      }
+                    >
                       Edit Profile
-                    </Link>
+                    </NavLink>
                   </DropdownMenuItem>
                   {userDetails.role !== "Student" ? (
                     <>
@@ -130,7 +148,7 @@ const Navbar = () => {
                           className={({ isActive }) =>
                             isActive
                               ? "text-red-500 font-semibold w-full"
-                              : "text-black w-full"
+                              : "text-black dark:text-slate-100 w-full"
                           }
                         >
                           Dashborad
@@ -158,7 +176,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <div className="relative group">
+            {/* <div className="relative group">
               <Button to={"#"} className="">
                 Teach on Eduvanza
               </Button>
@@ -169,7 +187,7 @@ const Navbar = () => {
                 </p>
                 <Button className="w-full my-2">Learn More</Button>
               </div>
-            </div>
+            </div> */}
 
             {/* Login & SignUp Btn */}
             <div className="flex gap-2">
@@ -218,14 +236,41 @@ const MobileNavbar = () => {
               {isLoggedIn && (
                 <>
                   <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
-                    <Link to={"/my-learning"}>My Learning</Link>
+                    <NavLink
+                      to="/admin/dashboard"
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-red-500 font-semibold w-full"
+                          : "text-black dark:text-slate-100 w-full"
+                      }
+                    >
+                      My Learning
+                    </NavLink>
                   </div>
                   <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
-                    <Link to={"/profile"}>Edit Profile</Link>
+                    <NavLink
+                      to="/admin/dashboard"
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-red-500 font-semibold w-full"
+                          : "text-black dark:text-slate-100 w-full"
+                      }
+                    >
+                      Edit Profile
+                    </NavLink>
                   </div>
                   <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
                     {userDetails.role !== "Student" && (
-                      <Link to={"/admin/dashboard"}>Dashborad</Link>
+                      <NavLink
+                        to={"/admin/dashboard"}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-red-500 font-semibold w-full"
+                            : "text-black dark:text-slate-100 w-full"
+                        }
+                      >
+                        Dashborad
+                      </NavLink>
                     )}
                   </div>
                 </>

@@ -45,6 +45,7 @@ app.use("/api/progress", courseProgressRoutes)
 
 
 app.get("/", (req, res) => res.status(200).json({ msg: "Message from Express" }));
+app.get("/api/demo", (req, res) => res.status(200).json({ msg: "Demo Message from Backend Testing" }));
 
 
 

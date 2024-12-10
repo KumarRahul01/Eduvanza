@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-const MEDIA_API = "http://localhost:3000/api/media";
+const MEDIA_API = `${import.meta.env.VITE_BACKEND_URL}api/media`;
 
 const LectureTab = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -81,7 +81,9 @@ const LectureTab = () => {
 
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/course/${courseId}/lecture/${lectureId}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }api/course/${courseId}/lecture/${lectureId}`,
         myData,
         {
           withCredentials: true,
@@ -102,9 +104,12 @@ const LectureTab = () => {
 
   const removeLectureHandler = async () => {
     try {
-      axios.delete(`http://localhost:3000/api/course/lecture/${lectureId}`, {
-        withCredentials: true,
-      });
+      axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}api/course/lecture/${lectureId}`,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success("Lecture removed");
       navigate(-1);
     } catch (error) {
@@ -116,7 +121,7 @@ const LectureTab = () => {
     try {
       setIsLoading(true);
       const res = axios.get(
-        `http://localhost:3000/api/course/lecture/${lectureId}`
+        `${import.meta.env.VITE_BACKEND_URL}api/course/lecture/${lectureId}`
       );
       const data = await res;
       setIsLoading(false);

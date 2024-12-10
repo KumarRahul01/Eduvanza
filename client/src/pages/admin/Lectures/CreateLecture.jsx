@@ -22,7 +22,7 @@ const CreateLecture = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/course/${courseId}/lecture`,
+        `${import.meta.env.VITE_BACKEND_URL}api/course/${courseId}/lecture`,
         { withCredentials: true }
       );
       setLoading(false);
@@ -46,7 +46,7 @@ const CreateLecture = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        `http://localhost:3000/api/course/${courseId}/lecture`,
+        `${import.meta.env.VITE_BACKEND_URL}api/course/${courseId}/lecture`,
         { lectureTitle },
         { withCredentials: true }
       );

@@ -32,7 +32,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     // baseURL
-    const baseURL = "http://localhost:3000/api/course/search?";
+    const baseURL = `${import.meta.env.VITE_BACKEND_URL}api/course/search?`;
 
     // Encode parameters
     const encodedCategories = selectedCategories

@@ -21,9 +21,12 @@ const CourseTable = () => {
   useEffect(() => {
     const getAllPublishedCourses = async () => {
       try {
-        const data = await axios.get("http://localhost:3000/api/course", {
-          withCredentials: true,
-        });
+        const data = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}api/course`,
+          {
+            withCredentials: true,
+          }
+        );
         // console.log(data?.data?.courses);
         setAllCourses(data?.data?.courses);
       } catch (error) {

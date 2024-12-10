@@ -57,9 +57,13 @@ const Login = () => {
   const signUpLogic = async () => {
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:3000/api/user/signup", signUpInput, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}api/user/signup`,
+        signUpInput,
+        {
+          withCredentials: true,
+        }
+      );
       console.log(signUpInput);
       setErrorMsg("");
       toast.success("SignUp Successfully!");
@@ -80,9 +84,13 @@ const Login = () => {
   const loginLogic = async () => {
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:3000/api/user/login", loginInput, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}api/user/login`,
+        loginInput,
+        {
+          withCredentials: true,
+        }
+      );
       setErrorMsg("");
       toast.success("Login successfully!");
       setReloadPage(true);

@@ -11,7 +11,7 @@ const Courses = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/course/published-courses`,
+        `${import.meta.env.VITE_BACKEND_URL}api/course/published-courses`,
         {
           withCredentials: true,
         }

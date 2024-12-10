@@ -33,7 +33,7 @@ const CourseDetails = () => {
     setIsLoading(true);
     try {
       const data = await axios.get(
-        `http://localhost:3000/api/course/${courseId}`
+        `${import.meta.env.VITE_BACKEND_URL}api/course/${courseId}`
       );
       setIsLoading(false);
       // console.log("Response", data.data);
@@ -51,7 +51,7 @@ const CourseDetails = () => {
     setIsLoading(true);
     try {
       const data = await axios.get(
-        `http://localhost:3000/api/details/course/${courseId}`
+        `${import.meta.env.VITE_BACKEND_URL}api/details/course/${courseId}`
       );
       setIsLoading(false);
       // console.log("Response", data.data);

@@ -47,7 +47,7 @@ const Navbar = () => {
     console.log("click logout btn");
 
     try {
-      await axios.get("http://localhost:3000/api/user/logout");
+      await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/user/logout`);
       console.log("Logout Successfully!");
       setReloadPage(true);
       navigate("/");

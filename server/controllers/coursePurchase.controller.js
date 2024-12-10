@@ -39,7 +39,7 @@ export const handleCoursePayment = async (req, res) => {
       name: req.body.name,
       amount: req.body.amount * 100, // Convert to paise
       // redirectUrl: `${process.env.BACKEND_URL}/api/payment/status?id=${merchantTransactionId}`,
-      redirectUrl: `http://localhost:3000/api/payment/status?id=${merchantTransactionId}`,
+      redirectUrl: `${process.env.BACKEND_URL}api/payment/status?id=${merchantTransactionId}`,
       redirectMode: 'POST',
       mobileNumber: req.body.phone,
       paymentInstrument: {

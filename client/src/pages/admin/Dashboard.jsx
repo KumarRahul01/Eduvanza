@@ -26,7 +26,7 @@ const Dashboard = () => {
   const getDashboardData = async () => {
     setIsLoading(true);
     const myData = await axios.get(
-      `http://localhost:3000/api/payment/dashboard`,
+      `${import.meta.env.VITE_BACKEND_URL}api/payment/dashboard`,
       {
         withCredentials: true,
       }

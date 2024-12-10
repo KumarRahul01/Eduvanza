@@ -73,7 +73,7 @@ const CourseTab = () => {
       SetIsPageLoadded(false);
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/course/${courseId}`
+          `${import.meta.env.VITE_BACKEND_URL}api/course/${courseId}`
         );
         const courseData = response.data.course;
         SetIsPageLoadded(true);
@@ -119,7 +119,7 @@ const CourseTab = () => {
     try {
       setIsLoading(true);
       const data = await axios.put(
-        `http://localhost:3000/api/course/${courseId}`,
+        `${import.meta.env.VITE_BACKEND_URL}api/course/${courseId}`,
         formData,
         {
           withCredentials: true,
@@ -139,7 +139,9 @@ const CourseTab = () => {
     try {
       const newPublishStatus = !isPublished; // Toggle the current status
       const res = await axios.put(
-        `http://localhost:3000/api/course/${courseId}/course/?publish=${newPublishStatus}`,
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }api/course/${courseId}/course/?publish=${newPublishStatus}`,
         { isPublished: newPublishStatus }, // Update the backend
         { withCredentials: true }
       );
@@ -163,7 +165,7 @@ const CourseTab = () => {
   const removeCourseHandler = async () => {
     try {
       const course = await axios.delete(
-        `http://localhost:3000/api/course/${courseId}`,
+        `${import.meta.env.VITE_BACKEND_URL}api/course/${courseId}`,
         {
           withCredentials: true,
         }

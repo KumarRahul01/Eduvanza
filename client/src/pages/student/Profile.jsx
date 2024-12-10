@@ -51,7 +51,7 @@ const Profile = () => {
       formData.append("profilePhoto", profilePhoto);
       try {
         await axios.put(
-          "http://localhost:3000/api/user/profile/update",
+          `${import.meta.env.VITE_BACKEND_URL}api/user/profile/update`,
           formData,
           {
             withCredentials: true,
@@ -74,7 +74,9 @@ const Profile = () => {
   const getUserProfile = async () => {
     const fetchProfileData = async () => {
       try {
-        const data = await axios.get("http://localhost:3000/api/user/profile");
+        const data = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}api/user/profile`
+        );
         const userData = data.data?.user;
         setUserDetails(userData);
         console.log(userData);

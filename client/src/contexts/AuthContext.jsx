@@ -24,17 +24,19 @@ export const AuthContextProvider = ({ children }) => {
     const uid = getCookie("uid");
 
     if (uid) {
-      console.log("User is already logged in");
+      // console.log("User is already logged in");
       setIsLoggedIn(true); // Set logged in state to true
     } else {
-      console.log("User is not logged in");
+      // console.log("User is not logged in");
       setIsLoggedIn(false); // Set logged in state to false
     }
   }, []);
 
   const fetchProfileData = async () => {
     try {
-      const data = await axios.get("http://localhost:3000/api/user/profile");
+      const data = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}api/user/profile`
+      );
       setUserDetails(data.data.user);
     } catch (error) {
       console.error(

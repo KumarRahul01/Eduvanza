@@ -9,8 +9,6 @@ import Dashboard from "./pages/admin/Dashboard";
 import CourseTable from "./pages/admin/Course/CourseTable";
 import AddCourse from "./pages/admin/Course/AddCourse";
 import EditCourse from "./pages/admin/Course/EditCourse";
-import { AuthContext } from "./contexts/AuthContext";
-import { useContext } from "react";
 import CreateLecture from "./pages/admin/Lectures/createLecture";
 import EditLecture from "./pages/admin/Lectures/EditLecture";
 import CourseDetails from "./pages/student/courseDetails";

@@ -8,9 +8,12 @@ const MyLearning = () => {
   const [myLearning, setMyLearning] = useState([]);
 
   const fetchUserData = async () => {
-    const data = await axios.get(`http://localhost:3000/api/user/profile`, {
-      withCredentials: true,
-    });
+    const data = await axios.get(
+      `${import.meta.env.VITE_BACKEND_URL}api/user/profile`,
+      {
+        withCredentials: true,
+      }
+    );
     console.log(data);
     setIsLoading(false);
     setMyLearning(data.data?.user?.enrolledCourses);

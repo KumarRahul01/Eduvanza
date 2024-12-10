@@ -3,8 +3,6 @@ import { Edit } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Lecture = ({ lecture, index }) => {
-  // console.log(courseId);
-
   const navigate = useNavigate();
   const goToUpdateLecture = () => {
     navigate(`${lecture._id}`);

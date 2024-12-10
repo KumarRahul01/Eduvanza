@@ -55,9 +55,13 @@ const AddCourse = () => {
 
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:3000/api/course/create", formData, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}api/course/create`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
       setIsLoading(false);
       console.log("Course Created!");
       toast.success("Course Created Successfully!");

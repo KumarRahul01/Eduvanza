@@ -61,7 +61,7 @@ const Checkout = () => {
       localStorage.removeItem("price");
       try {
         const res = await axios.post(
-          "http://localhost:3000/api/payment/order",
+          `${import.meta.env.VITE_BACKEND_URL}api/payment/order`,
           data,
           {
             withCredentials: true,

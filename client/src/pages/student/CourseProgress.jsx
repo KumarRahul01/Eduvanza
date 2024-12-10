@@ -25,7 +25,7 @@ const CourseProgress = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:3000/api/progress/${courseId}`
+        `${import.meta.env.VITE_BACKEND_URL}api/progress/${courseId}`
       );
       setCourseProgress(res.data?.data || { courseDetails: { lectures: [] } });
       if (res.data?.data.completed) {
@@ -43,7 +43,9 @@ const CourseProgress = () => {
   const handleLectureProgress = async (lectureId) => {
     try {
       await axios.post(
-        `http://localhost:3000/api/progress/${courseId}/lecture/${lectureId}/view`
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }api/progress/${courseId}/lecture/${lectureId}/view`
       );
       // Update the local state to mark the lecture as completed
       setCourseProgress((prevProgress) => ({
@@ -84,7 +86,7 @@ const CourseProgress = () => {
   const handleCompleteCourse = async () => {
     try {
       await axios.post(
-        `http://localhost:3000/api/progress/${courseId}/complete`
+        `${import.meta.env.VITE_BACKEND_URL}api/progress/${courseId}/complete`
       );
       setCompleteCourseBtn(true);
       toast.success("Congratulations course completed!");
@@ -96,7 +98,7 @@ const CourseProgress = () => {
   const handleIncompleteCourse = async () => {
     try {
       await axios.post(
-        `http://localhost:3000/api/progress/${courseId}/incomplete`
+        `${import.meta.env.VITE_BACKEND_URL}api/progress/${courseId}/incomplete`
       );
       toast.success("Course marked as Incompleted!");
       setCompleteCourseBtn(false);

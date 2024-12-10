@@ -7,6 +7,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const CourseProgress = () => {
+  {
+    /* comment added for deployment */
+  }
+
   const [isLoading, setIsLoading] = useState(false);
   const [currLecture, setCurrLecture] = useState(null);
   const [courseProgress, setCourseProgress] = useState({

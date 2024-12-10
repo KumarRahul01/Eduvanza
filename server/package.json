@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "build": "npm run vercel-build"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "Rahul Kumar",

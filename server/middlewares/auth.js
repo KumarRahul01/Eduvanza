@@ -4,6 +4,8 @@ export const IsAuthenticated = async (req, res, next) => {
   // Get the token from the Authorization header
   // const token = req.header("Authorization")?.replace("Bearer ", "");
   const token = req.cookies.uid;
+  console.log("token", token);
+
 
   if (!token) {
     return res.status(401).json({ error: 'User not authenticated, please login', redirectToLogin: true });

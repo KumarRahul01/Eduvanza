@@ -2,10 +2,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 import Course from "./Course";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 
 const Courses = () => {
   const [isloading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [showCourses, setShowCourses] = useState(false);
 
   const fetchAllCourses = async () => {
     setIsLoading(true);
@@ -18,6 +20,7 @@ const Courses = () => {
       );
       // console.log("Response", res);
       setData(res.data.courses);
+      setShowCourses(true);
       setIsLoading(false);
     } catch (error) {
       console.log("Error in fetching courses", error);
@@ -48,6 +51,12 @@ const Courses = () => {
           })}
         </div>
       )}
+
+      {!showCourses && (
+        <>
+          <Loading />
+        </>
+      )}
     </div>
   );
 };
@@ -69,6 +78,14 @@ const MySkeleton = () => {
         </div>
         <Skeleton className="h-4 w-1/4" />
       </div>
+    </div>
+  );
+};
+
+const Loading = () => {
+  return (
+    <div className="flex items-center justify-center">
+      <Loader2 className="h-12 w-12 animate-spin" /> <p>Loading...</p>
     </div>
   );
 };

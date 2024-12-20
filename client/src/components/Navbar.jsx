@@ -32,15 +32,9 @@ const Navbar = () => {
     fetchProfileData,
     userDetails,
     isLoggedIn,
-    reloadPage,
+    // reloadPage,
     setReloadPage,
   } = useContext(AuthContext);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      fetchProfileData();
-    }
-  }, [isLoggedIn, fetchProfileData]);
 
   // Logout Handler
   const logoutHandler = async () => {
@@ -56,12 +50,19 @@ const Navbar = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (reloadPage) {
+  //     navigate(0);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [reloadPage]);
+
   useEffect(() => {
-    if (reloadPage) {
-      navigate(0);
+    if (isLoggedIn) {
+      console.log("isloggedIn", isLoggedIn);
+      fetchProfileData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reloadPage]);
+  }, [isLoggedIn, fetchProfileData]);
 
   return (
     <>
@@ -176,23 +177,11 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            {/* <div className="relative group">
-              <Button to={"#"} className="">
-                Teach on Eduvanza
-              </Button>
-              <div className="hidden group-hover:block absolute top-14 left-0 p-4 w-[320px] h-40 border border-gray-300 shadow-lg bg-white">
-                <p className="font-bold text-xl">
-                  Turn your knowledge into an opportunity and reach millions of
-                  users
-                </p>
-                <Button className="w-full my-2">Learn More</Button>
-              </div>
-            </div> */}
-
             {/* Login & SignUp Btn */}
             <div className="flex gap-2">
               <Button onClick={() => navigate("/login")}>Login</Button>
               <Button onClick={() => navigate("/signup")}>SignUp</Button>
+              <DarkMode />
             </div>
           </>
         )}

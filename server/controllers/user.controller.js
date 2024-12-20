@@ -41,9 +41,11 @@ export const handleUserSignUp = async (req, res) => {
 
 export const handleUserLogin = async (req, res) => {
   const { email, password } = req.body;
+  console.log(email, password);
+
 
   try {
-    const lowercaseEmail = email?.toLowerCase();
+    // const lowercaseEmail = email?.toLowerCase();
 
     // Ensure required fields are provided
     if (!password || !email) {
@@ -51,7 +53,8 @@ export const handleUserLogin = async (req, res) => {
     }
 
     // Find user by either username or email
-    const user = await User.findOne({ email: lowercaseEmail });
+    // const user = await User.findOne({ email: lowercaseEmail });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -67,6 +70,7 @@ export const handleUserLogin = async (req, res) => {
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
       expiresIn: "1d"
     });
+
 
     // set cookie
     res.cookie("uid", token, {

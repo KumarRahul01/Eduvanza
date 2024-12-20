@@ -4,9 +4,6 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config()
 
-import SHA256 from 'crypto-js/sha256.js';
-import axios from 'axios';
-
 import connectDB from "./db/db.js";
 import userRoutes from "./routes/user.routes.js"
 import courseRoutes from "./routes/course.routes.js"
@@ -23,11 +20,10 @@ const url = process.env.MONGODB_URI;
 connectDB(url);
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }
-
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -45,9 +41,6 @@ app.use("/api/progress", courseProgressRoutes)
 
 
 app.get("/", (req, res) => res.status(200).json({ msg: "Message from Express" }));
-// app.get("/api/demo", (req, res) => res.status(200).json({ msg: "Demo Message from Backend Testing" }));
-
-
 
 
 app.listen(PORT, () => {

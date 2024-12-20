@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { CircleCheckBig, CirclePlay, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const CourseProgress = () => {
@@ -23,7 +23,6 @@ const CourseProgress = () => {
 
   const params = useParams();
   const courseId = params.courseId;
-  const navigate = useNavigate();
 
   const handleGetCourseProgress = async () => {
     setIsLoading(true);

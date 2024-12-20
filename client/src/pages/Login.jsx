@@ -82,8 +82,8 @@ const Login = () => {
   };
 
   const loginLogic = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}api/user/login`,
         loginInput,
@@ -93,13 +93,13 @@ const Login = () => {
       );
       setErrorMsg("");
       toast.success("Login successfully!");
-      setReloadPage(true);
       navigate("/");
+      setReloadPage(true);
+      setIsLoading(false);
     } catch (error) {
       toast.error("Login Failed!");
       setErrorMsg(error.response?.data?.error || "Login Error");
     } finally {
-      setIsLoading(false);
       setLoginInput((prev) => ({
         email: prev.email,
         password: "",

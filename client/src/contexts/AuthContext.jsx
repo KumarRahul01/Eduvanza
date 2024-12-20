@@ -1,14 +1,15 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
+  const [reloadPage, setReloadPage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
-  const [cookieChecked, setCookieChecked] = useState(false); // Tracks if the cookie check is complete
 
   // Function to get the value of a specific cookie
   const getCookie = (name) => {
@@ -18,53 +19,36 @@ export const AuthContextProvider = ({ children }) => {
     return parts.length === 2 ? parts.pop().split(";").shift() : null;
   };
 
-  // Function to check the cookie with a polling mechanism
-  const checkCookie = async () => {
-    const COOKIE_NAME = "uid";
-    let attempts = 0; // To limit polling attempts
+  // Function to check the cookie
+  const checkCookie = () => {
+    const COOKIE_NAME = "uid"; // Define the cookie name
+    const uid = getCookie(COOKIE_NAME);
+    console.log("uid", uid);
 
-    const pollCookie = () => {
-      const uid = getCookie(COOKIE_NAME);
-      console.log("Polling for UID:", uid);
-      if (uid) {
-        setIsLoggedIn(true);
-        setCookieChecked(true); // Mark cookie check as complete
-      } else if (attempts < 10) {
-        // Retry up to 10 times (adjust as needed)
-        attempts++;
-        setTimeout(pollCookie, 500); // Check every 500ms
-      } else {
-        setIsLoggedIn(false); // If the cookie is still not available
-        setCookieChecked(true); // Mark cookie check as complete
-      }
-    };
-
-    pollCookie();
+    if (uid) {
+      setIsLoggedIn(true); // User is logged in
+    } else {
+      setIsLoggedIn(false); // User is not logged in
+    }
   };
 
   useEffect(() => {
     checkCookie();
   }, []);
 
-  // Function to fetch user profile data
   const fetchProfileData = async () => {
     try {
-      const { data } = await axios.get(
+      const data = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}api/user/profile`
       );
-      setUserDetails(data.user);
+      setUserDetails(data.data.user);
     } catch (error) {
       console.error(
-        "Error fetching profile data:",
-        error.response?.data?.error || error.message
+        "Error from frontend ContextAPI",
+        error.response.data.error
       );
     }
   };
-
-  if (!cookieChecked) {
-    // Optionally, show a loading state while waiting for the cookie
-    return <div>Loading...</div>;
-  }
 
   return (
     <AuthContext.Provider
@@ -74,6 +58,8 @@ export const AuthContextProvider = ({ children }) => {
         fetchProfileData,
         userDetails,
         setUserDetails,
+        reloadPage,
+        setReloadPage,
       }}
     >
       {children}

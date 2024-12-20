@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
@@ -9,6 +10,7 @@ export const AuthContextProvider = ({ children }) => {
   const [reloadPage, setReloadPage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
+  const [userUid, setUserUid] = useState("");
 
   // Check if user is login or not by checking cookie
   // useEffect(() => {
@@ -33,17 +35,19 @@ export const AuthContextProvider = ({ children }) => {
   //   }
   // }, []);
 
-  useEffect(() => {
-    // Function to get the value of a specific cookie
-    const getCookie = (name) => {
-      if (typeof document === "undefined") return null; // Ensure document.cookie is available
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      return parts.length === 2 ? parts.pop().split(";").shift() : null;
-    };
+  // Function to get the value of a specific cookie
+  const getCookie = (name) => {
+    if (typeof document === "undefined") return null; // Ensure document.cookie is available
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    return parts.length === 2 ? parts.pop().split(";").shift() : null;
+  };
 
+  // Function to check the cookie
+  const checkCookie = async () => {
     const COOKIE_NAME = "uid"; // Define the cookie name
     const uid = getCookie(COOKIE_NAME);
+    setUserUid(uid);
     console.log("uid", uid);
 
     if (uid) {
@@ -51,7 +55,11 @@ export const AuthContextProvider = ({ children }) => {
     } else {
       setIsLoggedIn(false); // User is not logged in
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    checkCookie();
+  }, [userUid]);
 
   const fetchProfileData = async () => {
     try {

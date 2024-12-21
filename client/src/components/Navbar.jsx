@@ -32,7 +32,7 @@ const Navbar = () => {
     fetchProfileData,
     userDetails,
     isLoggedIn,
-    reloadPage,
+    // reloadPage,
     setReloadPage,
   } = useContext(AuthContext);
 
@@ -50,12 +50,12 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    if (reloadPage) {
-      navigate(0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reloadPage]);
+  // useEffect(() => {
+  //   if (reloadPage) {
+  //     navigate(0);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [reloadPage]);
 
   useEffect(() => {
     if (isLoggedIn) {

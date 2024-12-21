@@ -20,9 +20,9 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   // Function to check the cookie
+  const COOKIE_NAME = "uid"; // Define the cookie name
+  const uid = getCookie(COOKIE_NAME);
   const checkCookie = () => {
-    const COOKIE_NAME = "uid"; // Define the cookie name
-    const uid = getCookie(COOKIE_NAME);
     console.log("uid", uid);
 
     if (uid) {
@@ -33,8 +33,9 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    alert("Hlo");
     checkCookie();
-  }, []);
+  }, [uid]);
 
   const fetchProfileData = async () => {
     try {

@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Manual changes
+client/node_modules
+client/dist
+.env
+.client/.env
+.server/.env

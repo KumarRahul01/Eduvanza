@@ -25,8 +25,5 @@ dist-ssr
 
 
 # Manual changes
-client/node_modules
-client/dist
-.env
-.client/.env
-.server/.env
+env
+

@@ -27,15 +27,15 @@ export const AuthContextProvider = ({ children }) => {
 
     if (uid) {
       setIsLoggedIn(true); // User is logged in
+      fetchProfileData();
     } else {
       setIsLoggedIn(false); // User is not logged in
     }
   };
 
   useEffect(() => {
-    alert("Hlo");
     checkCookie();
-  }, [uid]);
+  }, []);
 
   const fetchProfileData = async () => {
     try {
@@ -56,7 +56,6 @@ export const AuthContextProvider = ({ children }) => {
       value={{
         isLoggedIn,
         setIsLoggedIn,
-        fetchProfileData,
         userDetails,
         setUserDetails,
         reloadPage,

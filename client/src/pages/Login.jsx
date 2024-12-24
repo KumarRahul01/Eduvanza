@@ -85,8 +85,8 @@ const Login = () => {
     setIsLoading(true);
     try {
       await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}api/user/login`,
-        // `http://localhost:3000/api/user/login`,
+        // `${import.meta.env.VITE_BACKEND_URL}api/user/login`,
+        `http://localhost:3000/api/user/login`,
         loginInput,
         {
           withCredentials: true,
@@ -95,7 +95,7 @@ const Login = () => {
       setErrorMsg("");
       toast.success("Login successfully!");
       navigate("/");
-      // setReloadPage(true);
+      setReloadPage(true);
       setIsLoading(false);
     } catch (error) {
       toast.error("Login Failed!");

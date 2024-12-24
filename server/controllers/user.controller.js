@@ -106,7 +106,7 @@ export const handleUserLogout = async (req, res) => {
 export const handleGetUserProfile = async (req, res) => {
   try {
     const userId = req.userId;
-    // console.log("userId", userId);
+    console.log("userId", userId);
     if (!userId) {
       return res.status(401).json({ message: "User not loggedIn" })
     }

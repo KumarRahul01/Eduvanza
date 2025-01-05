@@ -74,9 +74,10 @@ export const handleUserLogin = async (req, res) => {
 
     // set cookie
     res.cookie("uid", token, {
-      // httpOnly: true,  // Protects cookie from JavaScript access
+      httpOnly: true,  // Protects cookie from JavaScript access
       // secure: process.env.NODE_ENV === "production", // For secure cookie in production (requires HTTPS)
-      // sameSite: "Strict", // Optional: Helps prevent CSRF
+      secure: true,
+      sameSite: "None", // Optional: Helps prevent CSRF
       maxAge: 24 * 60 * 60 * 1000, // Expires in 1 day
     });
 

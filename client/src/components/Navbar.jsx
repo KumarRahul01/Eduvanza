@@ -28,8 +28,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const { userDetails, isLoggedIn, reloadPage, setReloadPage } =
-    useContext(AuthContext);
+  const { userDetails, isLoggedIn, setReloadPage } = useContext(AuthContext);
 
   // Logout Handler
   const logoutHandler = async () => {
@@ -45,20 +44,12 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    if (reloadPage) {
-      navigate(0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reloadPage]);
-
   // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     console.log("loggediN", isLoggedIn);
-
-  //     fetchProfileData();
+  //   if (reloadPage) {
+  //     navigate(0);
   //   }
-  // }, [isLoggedIn, fetchProfileData]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [reloadPage]);
 
   return (
     <>

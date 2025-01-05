@@ -83,18 +83,19 @@ const Login = () => {
 
   const loginLogic = async () => {
     setIsLoading(true);
+    // console.log(loginInput);
     try {
       await axios.post(
-        // `${import.meta.env.VITE_BACKEND_URL}api/user/login`,
-        `http://localhost:3000/api/user/login`,
+        `${import.meta.env.VITE_BACKEND_URL}api/user/login`,
+        // "http://localhost:3000/api/user/login",
         loginInput,
         {
           withCredentials: true,
         }
       );
       setErrorMsg("");
-      toast.success("Login successfully!");
       navigate("/");
+      toast.success("Login successfully!");
       setReloadPage(true);
       setIsLoading(false);
     } catch (error) {

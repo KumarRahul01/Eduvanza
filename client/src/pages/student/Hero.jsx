@@ -21,7 +21,7 @@ const Hero = () => {
             All the skills you need in one place
           </h1>
           <p className="font-sans text-lg">
-            From critical skills to technical topics, Udemy supports your
+            From critical skills to technical topics, Eduvanza supports your
             professional development.
           </p>
         </div>

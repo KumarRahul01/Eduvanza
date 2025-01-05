@@ -7,49 +7,49 @@ export const AuthContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
-  const [reloadPage, setReloadPage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
+  const [reloadPage, setReloadPage] = useState(false);
 
-  // Function to get the value of a specific cookie
-  const getCookie = (name) => {
-    if (typeof document === "undefined") return null; // Ensure document.cookie is available
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    return parts.length === 2 ? parts.pop().split(";").shift() : null;
+  // Function to get the cookie by name
+  const getUID = () => {
+    return document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("uid="))
+      ?.split("=")[1];
   };
 
-  // Function to check the cookie
-  const COOKIE_NAME = "uid"; // Define the cookie name
-  const uid = getCookie(COOKIE_NAME);
-  const checkCookie = () => {
-    console.log("uid", uid);
-
-    if (uid) {
-      setIsLoggedIn(true); // User is logged in
-      fetchProfileData();
-    } else {
-      setIsLoggedIn(false); // User is not logged in
-    }
-  };
-
-  useEffect(() => {
-    checkCookie();
-  }, []);
-
+  // Fetch user profile data
   const fetchProfileData = async () => {
     try {
-      const data = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}api/user/profile`
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}api/user/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${getUID()}`, // Pass UID in the Authorization header
+          },
+        }
       );
-      setUserDetails(data.data.user);
+      setUserDetails(data.user);
     } catch (error) {
       console.error(
-        "Error from frontend ContextAPI",
-        error.response.data.error
+        "Error fetching user profile data",
+        error.response?.data?.error || error.message
       );
+      setIsLoggedIn(false); // Set to false if fetching fails
     }
   };
+
+  // Check for UID and fetch data if user is logged in
+  useEffect(() => {
+    const uid = getUID();
+    if (uid) {
+      setIsLoggedIn(true);
+      fetchProfileData();
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, [reloadPage]); // Add reloadPage as a dependency to refetch when it changes
 
   return (
     <AuthContext.Provider

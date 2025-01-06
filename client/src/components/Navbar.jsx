@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -28,28 +28,21 @@ import { AuthContext } from "@/contexts/AuthContext";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const { userDetails, isLoggedIn, setReloadPage } = useContext(AuthContext);
+  const { userDetails, isLoggedIn } = useContext(AuthContext);
+
+  // TODO: Make logout Handler functionality try gpt to write code to rmove cookie
 
   // Logout Handler
   const logoutHandler = async () => {
-    console.log("click logout btn");
-
     try {
       await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/user/logout`);
       console.log("Logout Successfully!");
-      setReloadPage(true);
+      navigate(0);
       navigate("/");
     } catch (error) {
       console.log("Error Logout Frontend", error);
     }
   };
-
-  // useEffect(() => {
-  //   if (reloadPage) {
-  //     navigate(0);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [reloadPage]);
 
   return (
     <>

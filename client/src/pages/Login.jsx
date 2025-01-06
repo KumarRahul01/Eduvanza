@@ -20,7 +20,7 @@ import { AuthContext } from "@/contexts/AuthContext";
 const Login = () => {
   const navigate = useNavigate();
 
-  const { setReloadPage } = useContext(AuthContext);
+  const { setIsLoggedIn } = useContext(AuthContext);
 
   const [currentTab, setCurrentTab] = useState("signup");
 
@@ -96,7 +96,7 @@ const Login = () => {
       setErrorMsg("");
       navigate("/");
       toast.success("Login successfully!");
-      setReloadPage(true);
+      setIsLoggedIn(true);
       setIsLoading(false);
     } catch (error) {
       toast.error("Login Failed!");

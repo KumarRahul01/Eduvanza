@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 
@@ -11,26 +10,17 @@ export const AuthContextProvider = ({ children }) => {
   const [userDetails, setUserDetails] = useState([]);
   const [reloadPage, setReloadPage] = useState(false);
 
-  // Function to get the cookie by name
-  const getUID = () => {
-    return document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("uid="))
-      ?.split("=")[1];
-  };
-
   // Fetch user profile data
   const fetchProfileData = async () => {
     try {
       const { data } = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}api/user/profile`,
         {
-          headers: {
-            Authorization: `Bearer ${getUID()}`, // Pass UID in the Authorization header
-          },
+          withCredentials: true,
         }
       );
       setUserDetails(data.user);
+      setIsLoggedIn(true);
     } catch (error) {
       console.error(
         "Error fetching user profile data",
@@ -42,14 +32,13 @@ export const AuthContextProvider = ({ children }) => {
 
   // Check for UID and fetch data if user is logged in
   useEffect(() => {
-    const uid = getUID();
-    if (uid) {
+    fetchProfileData();
+    if (isLoggedIn) {
       setIsLoggedIn(true);
-      fetchProfileData();
     } else {
       setIsLoggedIn(false);
     }
-  }, [reloadPage]); // Add reloadPage as a dependency to refetch when it changes
+  }, [isLoggedIn]); // Add isLoggedIn as a dependency to refetch when it changes
 
   return (
     <AuthContext.Provider

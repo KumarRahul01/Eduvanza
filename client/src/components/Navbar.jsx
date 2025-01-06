@@ -28,17 +28,19 @@ import { AuthContext } from "@/contexts/AuthContext";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const { userDetails, isLoggedIn } = useContext(AuthContext);
+  const { userDetails, isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
   // TODO: Make logout Handler functionality try gpt to write code to rmove cookie
 
   // Logout Handler
   const logoutHandler = async () => {
     try {
-      await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/user/logout`);
+      await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/user/logout`, {
+        withCredentials: true,
+      });
       console.log("Logout Successfully!");
-      navigate(0);
       navigate("/");
+      setIsLoggedIn(false);
     } catch (error) {
       console.log("Error Logout Frontend", error);
     }

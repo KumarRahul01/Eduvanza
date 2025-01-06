@@ -93,7 +93,7 @@ export const handleUserLogin = async (req, res) => {
 export const handleUserLogout = async (req, res) => {
   try {
     // Clear the cookie without specifying a path
-    res.clearCookie("uid");
+    res.clearCookie('uid', { path: '/', sameSite: 'None', secure: true });
 
     return res.status(200).json({ message: "Logout successful" });
   } catch (error) {

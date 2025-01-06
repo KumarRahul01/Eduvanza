@@ -30,14 +30,7 @@ const App = () => {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route
-            path="/course/search"
-            element={
-              <ProtectedRoutes>
-                <SearchPage />
-              </ProtectedRoutes>
-            }
-          />
+          <Route path="/course/search" element={<SearchPage />} />
           <Route path="/course-detail/:courseId" element={<CourseDetails />} />
 
           {/* Routes With validations */}

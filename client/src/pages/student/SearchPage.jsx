@@ -45,7 +45,7 @@ const SearchPage = () => {
     }).toString();
 
     const finalURL = baseURL + params;
-    console.log(finalURL);
+    // console.log(finalURL);
 
     fetchSearchResult(finalURL);
   }, [selectedCategories, sortByPrice]);

@@ -5,7 +5,7 @@ import { IsAuthenticated } from "../middlewares/auth.js";
 const router = express.Router();
 
 router.route("/").get(IsAuthenticated, handleGetCreatorCourses);
-router.route("/search").get(IsAuthenticated, handleSearchCourse);
+router.route("/search").get(handleSearchCourse);
 router.route("/published-courses").get(handleGetPublishedCourse);
 router.route("/:courseId").get(handleGetCourseByCourseId)
 

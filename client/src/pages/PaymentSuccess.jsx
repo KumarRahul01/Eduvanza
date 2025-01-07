@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 const PaymentSuccess = () => {
   const navigate = useNavigate();
 
-  const courseId = "674ed29ac8cfab4b0c5d517b";
-
   return (
     <div className="flex flex-col items-center justify-center translate-y-[50%]">
       <div className="bg-white shadow-lg rounded-lg p-8 text-center max-w-lg w-full">
@@ -22,7 +20,7 @@ const PaymentSuccess = () => {
           <Button
             variant="secondary"
             className="w-full"
-            onClick={() => navigate(`/course-detail/${courseId}`)}
+            onClick={() => navigate(`/my-learning`)}
           >
             Continue Course
           </Button>

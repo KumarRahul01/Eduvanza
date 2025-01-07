@@ -19,6 +19,7 @@ export const handleCoursePayment = async (req, res) => {
 
     if (!name || !email || !phone) {
       console.log("All fields are required")
+      return res.status(400).json({ msg: "All fields are required" });
     }
 
     // create CoursePurchase collection
@@ -32,12 +33,13 @@ export const handleCoursePayment = async (req, res) => {
     const merchantTransactionId = req.body.transactionId;
     const data = {
       merchantId: process.env.MERCHANT_ID,
-      merchantTransactionId,
+      merchantTransactionId: merchantTransactionId,
       name: req.body.name,
-      amount: req.body.amount * 100, // Convert to paise
-      redirectUrl: `${process.env.BACKEND_URL}/api/payment/status?id=${merchantTransactionId}`,
-      redirectMode: 'POST',
+      amount: req.body.amount * 100, // Convert to Rupees
       mobileNumber: req.body.phone,
+      // redirectUrl: `${process.env.BACKEND_URL}/api/payment/status?id=${merchantTransactionId}`,
+      redirectUrl: `https://eduvanza-jeva.onrender.com/api/payment/status?id=${merchantTransactionId}`,
+      redirectMode: 'POST',
       paymentInstrument: {
         type: 'PAY_PAGE',
       },
@@ -50,7 +52,12 @@ export const handleCoursePayment = async (req, res) => {
     const sha256 = SHA256(string).toString();
     const checksum = `${sha256}###${keyIndex}`;
 
+    // PRODUCTION URL = 'http://api.phonepe.com/apis/hermes/pg/v1/pay'
+
     const test_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay';
+
+    // DATA send with request
+
     const options = {
       method: 'POST',
       url: test_URL,
@@ -65,6 +72,7 @@ export const handleCoursePayment = async (req, res) => {
     };
 
     const response = await axios(options);
+    console.log(response.data);
     return res.json(response.data);
   } catch (error) {
     console.error("Error Response:", error.response?.data || error.message);
@@ -150,13 +158,13 @@ export const handleCoursePaymentStatus = async (req, res) => {
 
 
     if (response.data.success === true) {
-      // updateCoursePurchase();
-
+      console.log("hello");
       const url = `${process.env.FRONTEND_URL}/payment-success`
       return res.redirect(url)
 
 
     } else {
+      console.log("hi");
       const url = `${process.env.FRONTEND_URL}/payment-failed`
       return res.redirect(url)
     }

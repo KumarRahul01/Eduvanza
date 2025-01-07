@@ -7,127 +7,127 @@ import { User } from '../models/user.model.js';
 
 
 
-// let myTransactionId;
-
-// export const handleCoursePayment = async (req, res) => {
-
-//   try {
-
-//     const { name, email, phone, amount, courseId, transactionId } = req.body;
-//     const userId = req.userId;
-
-//     myTransactionId = transactionId;
-
-
-//     if (!name || !email || !phone) {
-//       console.log("All fields are required");
-//       return res.status(400).json({ error: "All fields are required" });
-//     }
-
-//     // create CoursePurchase collection
-//     await CoursePurchase.create({
-//       courseId, userId, amount, paymentId: transactionId
-//     })
-
-//     // console.log("coursePurchase mOdel", coursePurchase);
-
-//     // console.log("demo payment", req.userId);
-//     const merchantTransactionId = req.body.transactionId;
-//     const data = {
-//       merchantId: process.env.MERCHANT_ID,
-//       merchantTransactionId,
-//       name: req.body.name,
-//       amount: req.body.amount * 100, // Convert to paise
-//       redirectUrl: `${process.env.BACKEND_URL}api/payment/status?id=${merchantTransactionId}`,
-//       redirectMode: 'POST',
-//       mobileNumber: req.body.phone,
-//       paymentInstrument: {
-//         type: 'PAY_PAGE',
-//       },
-//     };
-
-//     const payload = JSON.stringify(data);
-//     const payloadMain = Buffer.from(payload).toString('base64');
-//     const keyIndex = 1;
-//     const string = `${payloadMain}/pg/v1/pay${process.env.SALT_KEY}`;
-//     // const sha256 = SHA256(string).toString();
-//     // const checksum = `${sha256}###${keyIndex}`;
-//     const sha256 = crypto.createHash('sha256').update(string).digest('hex');
-//     const checksum = sha256 + '###' + keyIndex;
-
-//     const test_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay';
-//     const options = {
-//       method: 'POST',
-//       url: test_URL,
-//       headers: {
-//         accept: 'application/json',
-//         'Content-Type': 'application/json',
-//         'X-VERIFY': checksum,
-//       },
-//       data: {
-//         request: payloadMain,
-//       },
-//     };
-
-//     const response = await axios(options);
-//     return res.json(response.data);
-//   } catch (error) {
-//     console.error("Error Response:", error.response?.data || error.message);
-//     return res.status(500).json({ error: error.response?.data || "Internal Server Error" });
-//   }
-// };
-
-// Verify payment
+let myTransactionId;
 
 export const handleCoursePayment = async (req, res) => {
+
   try {
+
     const { name, email, phone, amount, courseId, transactionId } = req.body;
     const userId = req.userId;
 
+    myTransactionId = transactionId;
+
+
     if (!name || !email || !phone) {
+      console.log("All fields are required");
       return res.status(400).json({ error: "All fields are required" });
     }
 
+    // create CoursePurchase collection
     await CoursePurchase.create({
       courseId, userId, amount, paymentId: transactionId
-    });
+    })
 
+    // console.log("coursePurchase mOdel", coursePurchase);
+
+    // console.log("demo payment", req.userId);
+    const merchantTransactionId = req.body.transactionId;
     const data = {
       merchantId: process.env.MERCHANT_ID,
-      merchantTransactionId: transactionId,
-      name,
-      amount: amount * 100, // Convert to paise
-      redirectUrl: `${process.env.BACKEND_URL}/api/payment/status?id=${transactionId}`,
+      merchantTransactionId,
+      name: req.body.name,
+      amount: req.body.amount * 100, // Convert to paise
+      redirectUrl: `${process.env.BACKEND_URL}api/payment/status?id=${merchantTransactionId}`,
       redirectMode: 'POST',
-      mobileNumber: phone,
-      paymentInstrument: { type: 'PAY_PAGE' },
+      mobileNumber: req.body.phone,
+      paymentInstrument: {
+        type: 'PAY_PAGE',
+      },
     };
 
     const payload = JSON.stringify(data);
     const payloadMain = Buffer.from(payload).toString('base64');
+    const keyIndex = 1;
     const string = `${payloadMain}/pg/v1/pay${process.env.SALT_KEY}`;
+    // const sha256 = SHA256(string).toString();
+    // const checksum = `${sha256}###${keyIndex}`;
     const sha256 = crypto.createHash('sha256').update(string).digest('hex');
-    const checksum = `${sha256}###1`;
+    const checksum = sha256 + '###' + keyIndex;
 
+    const test_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay';
     const options = {
       method: 'POST',
-      url: 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay',
+      url: test_URL,
       headers: {
         accept: 'application/json',
         'Content-Type': 'application/json',
         'X-VERIFY': checksum,
       },
-      data: { request: payloadMain },
+      data: {
+        request: payloadMain,
+      },
     };
 
     const response = await axios(options);
     return res.json(response.data);
-
   } catch (error) {
     console.error("Error Response:", error.response?.data || error.message);
     return res.status(500).json({ error: error.response?.data || "Internal Server Error" });
   }
 };
+
+// Verify payment
+
+// export const handleCoursePayment = async (req, res) => {
+//   try {
+//     const { name, email, phone, amount, courseId, transactionId } = req.body;
+//     const userId = req.userId;
+
+//     if (!name || !email || !phone) {
+//       return res.status(400).json({ error: "All fields are required" });
+//     }
+
+//     await CoursePurchase.create({
+//       courseId, userId, amount, paymentId: transactionId
+//     });
+
+//     const data = {
+//       merchantId: process.env.MERCHANT_ID,
+//       merchantTransactionId: transactionId,
+//       name,
+//       amount: amount * 100, // Convert to paise
+//       redirectUrl: `${process.env.BACKEND_URL}/api/payment/status?id=${transactionId}`,
+//       redirectMode: 'POST',
+//       mobileNumber: phone,
+//       paymentInstrument: { type: 'PAY_PAGE' },
+//     };
+
+//     const payload = JSON.stringify(data);
+//     const payloadMain = Buffer.from(payload).toString('base64');
+//     const string = `${payloadMain}/pg/v1/pay${process.env.SALT_KEY}`;
+//     const sha256 = crypto.createHash('sha256').update(string).digest('hex');
+//     const checksum = `${sha256}###1`;
+
+//     const options = {
+//       method: 'POST',
+//       url: 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay',
+//       headers: {
+//         accept: 'application/json',
+//         'Content-Type': 'application/json',
+//         'X-VERIFY': checksum,
+//       },
+//       data: { request: payloadMain },
+//     };
+
+//     const response = await axios(options);
+//     return res.json(response.data);
+
+//   } catch (error) {
+//     console.error("Error Response:", error.response?.data || error.message);
+//     return res.status(500).json({ error: error.response?.data || "Internal Server Error" });
+//   }
+// };
 
 
 // export const handleCoursePaymentStatus = async (req, res) => {

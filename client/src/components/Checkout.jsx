@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const [btnDisable, setBtnDisable] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -60,6 +61,7 @@ const Checkout = () => {
     } else {
       localStorage.removeItem("price");
       try {
+        setBtnDisable(true);
         const res = await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}api/payment/order`,
           data,
@@ -153,6 +155,7 @@ const Checkout = () => {
             variant="outline"
             className="mt-6 w-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-950"
             onClick={paymentHandler}
+            disabled={btnDisable}
           >
             <ShoppingCart className="mr-2 h-5 w-5 " />
             Proceed to Pay

@@ -125,7 +125,7 @@ const CourseDetails = () => {
               </p>
             </div>
             <p className="my-1">
-              Enrolled Students: {courseData.enrolledStudents.length || 8}
+              Enrolled Students: {courseData.enrolledStudents.length || 0}
             </p>
           </div>
         </div>

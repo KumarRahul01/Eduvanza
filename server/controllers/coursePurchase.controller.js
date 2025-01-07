@@ -103,54 +103,54 @@ export const handleCoursePaymentStatus = async (req, res) => {
   }
 
 
-  // const updateCoursePurchase = async () => {
-  //   const myPurchase = await CoursePurchase.findOne({ paymentId: myTransactionId }).populate({ path: "courseId" });
+  const updateCoursePurchase = async () => {
+    const myPurchase = await CoursePurchase.findOne({ paymentId: myTransactionId }).populate({ path: "courseId" });
 
-  //   if (!myPurchase) {
-  //     console.error("CoursePurchase not found for transaction ID:", myTransactionId);
-  //     return null;
-  //   }
+    if (!myPurchase) {
+      console.error("CoursePurchase not found for transaction ID:", myTransactionId);
+      return null;
+    }
 
-  //   // Update the payment status to "completed"
-  //   const updatedData = { paymentStatus: "completed" };
-  //   const updatedCoursePurchase = await CoursePurchase.findByIdAndUpdate(
-  //     myPurchase._id,
-  //     { $set: updatedData },
-  //     { new: true }
-  //   );
+    // Update the payment status to "completed"
+    const updatedData = { paymentStatus: "completed" };
+    const updatedCoursePurchase = await CoursePurchase.findByIdAndUpdate(
+      myPurchase._id,
+      { $set: updatedData },
+      { new: true }
+    );
 
-  //   console.log("Updated CoursePurchase:", updatedCoursePurchase);
+    console.log("Updated CoursePurchase:", updatedCoursePurchase);
 
-  //   // Ensure lectures exist and are an array
-  //   if (myPurchase.courseId && myPurchase.courseId.lectures.length > 0) {
-  //     console.log("Lectures to update:", myPurchase.courseId.lectures);
+    // Ensure lectures exist and are an array
+    if (myPurchase.courseId && myPurchase.courseId.lectures.length > 0) {
+      console.log("Lectures to update:", myPurchase.courseId.lectures);
 
-  //     // Convert lecture IDs to ObjectId if necessary
+      // Convert lecture IDs to ObjectId if necessary
 
-  //     await Lecture.updateMany(
-  //       { _id: { $in: myPurchase.courseId.lectures } }, // Filter by lecture IDs
-  //       { $set: { isPreviewFree: true } }
-  //     );
-  //   } else {
-  //     console.error("No lectures found to update");
-  //   }
+      await Lecture.updateMany(
+        { _id: { $in: myPurchase.courseId.lectures } }, // Filter by lecture IDs
+        { $set: { isPreviewFree: true } }
+      );
+    } else {
+      console.error("No lectures found to update");
+    }
 
-  //   await myPurchase.save();
+    await myPurchase.save();
 
-  //   // Update user's enrolledCourses
-  //   await User.findByIdAndUpdate(
-  //     myPurchase.userId,
-  //     { $addToSet: { enrolledCourses: myPurchase.courseId._id } },
-  //     { new: true }
-  //   );
+    // Update user's enrolledCourses
+    await User.findByIdAndUpdate(
+      myPurchase.userId,
+      { $addToSet: { enrolledCourses: myPurchase.courseId._id } },
+      { new: true }
+    );
 
-  //   // Update course to add user ID to enrolledStudents
-  //   await Course.findByIdAndUpdate(
-  //     myPurchase.courseId._id,
-  //     { $addToSet: { enrolledStudents: myPurchase.userId } },
-  //     { new: true }
-  //   );
-  // };
+    // Update course to add user ID to enrolledStudents
+    await Course.findByIdAndUpdate(
+      myPurchase.courseId._id,
+      { $addToSet: { enrolledStudents: myPurchase.userId } },
+      { new: true }
+    );
+  };
 
 
 
@@ -158,13 +158,12 @@ export const handleCoursePaymentStatus = async (req, res) => {
 
 
     if (response.data.success === true) {
-      console.log("hello");
+      updateCoursePurchase()
       const url = `https://eduvanza.vercel.app/payment-success`
       return res.redirect(url)
 
 
     } else {
-      console.log("hi");
       const url = `https://eduvanza.vercel.app/payment-failed`
       return res.redirect(url)
     }

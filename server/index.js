@@ -20,7 +20,7 @@ const url = process.env.MONGODB_URI;
 connectDB(url);
 
 const corsOptions = {
-  origin: "http://localhost:5173", // frontendURL
+  origin: "https://eduvanza.vercel.app", // frontendURL
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }

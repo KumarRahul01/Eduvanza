@@ -159,13 +159,13 @@ export const handleCoursePaymentStatus = async (req, res) => {
 
     if (response.data.success === true) {
       console.log("hello");
-      const url = `${process.env.FRONTEND_URL}/payment-success`
+      const url = `https://eduvanza.vercel.app/payment-success`
       return res.redirect(url)
 
 
     } else {
       console.log("hi");
-      const url = `${process.env.FRONTEND_URL}/payment-failed`
+      const url = `https://eduvanza.vercel.app/payment-failed`
       return res.redirect(url)
     }
 

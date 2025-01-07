@@ -76,7 +76,7 @@ const Dashboard = () => {
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-bold text-blue-600">
-            {dashboardData.sales || 1}
+            {dashboardData.sales || 0}
           </p>
         </CardContent>
       </Card>
@@ -87,7 +87,7 @@ const Dashboard = () => {
         </CardHeader>
         <CardContent>
           <p className="text-3xl font-bold text-blue-600">
-            {dashboardData.revenue || 199}
+            {dashboardData.revenue || 0}
           </p>
         </CardContent>
       </Card>

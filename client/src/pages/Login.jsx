@@ -72,8 +72,6 @@ const Login = () => {
   };
 
   const signUpLogic = async () => {
-    console.log(setSignUpInput);
-
     try {
       setIsLoading(true);
       await axios.post(
@@ -83,9 +81,9 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      console.log(signUpInput);
       setErrorMsg("");
       toast.success("SignUp Successfully!");
+      setIsLoggedIn(true);
     } catch (error) {
       toast.error("SignUp Failed!");
       setErrorMsg(error.response?.data?.error || "SignUp Error");

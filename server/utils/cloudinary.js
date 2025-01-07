@@ -12,6 +12,7 @@ export const uploadMedia = async (file) => {
   try {
     const uploadResponse = await cloudinary.uploader.upload(file, {
       resource_type: "auto",
+      secure: true // Force 
     });
     return uploadResponse;
   } catch (error) {

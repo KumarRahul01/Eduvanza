@@ -15,7 +15,10 @@ export const uploadMedia = async (file) => {
       resource_type: "auto",
       secure: true // Force
     });
-    return uploadResponse;
+    // return uploadResponse;
+    // Ensure the URL is HTTPS
+    const mediaUrl = uploadResponse.secure_url || uploadResponse.url;
+    return { ...uploadResponse, secure_url: mediaUrl.replace('http://', 'https://') };
   } catch (error) {
     console.log(error);
   }

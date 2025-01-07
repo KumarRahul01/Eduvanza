@@ -16,9 +16,6 @@ export const handleCoursePayment = async (req, res) => {
 
     myTransactionId = transactionId;
 
-    // console.log({
-    //   name, email, phone, amount, userId, courseId, transactionId
-    // });
 
     if (!name || !email || !phone) {
       console.log("All fields are required")
@@ -198,16 +195,13 @@ export const handleCoursePaymentStatus = async (req, res) => {
 
     if (response.data.success === true) {
       updateCoursePurchase();
-      // console.log(response.data);
 
-      // const url = `${process.env.FRONTEND_URL}/payment-success`
-      const url = `http://localhost:5173/payment-success`
+      const url = `${process.env.FRONTEND_URL}/payment-success`
       return res.redirect(url)
 
 
     } else {
-      // const url = `${process.env.FRONTEND_URL}/payment-failed`
-      const url = `http://localhost:5173/payment-failed`
+      const url = `${process.env.FRONTEND_URL}/payment-failed`
       return res.redirect(url)
     }
 

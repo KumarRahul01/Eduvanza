@@ -135,7 +135,7 @@ export const handleSearchCourse = async (req, res) => {
 
 export const handleGetPublishedCourse = async (_, res) => {
   try {
-    const courses = await Course.find({ isPublished: true }).populate({ path: "creator", select: "name photoUrl" });
+    const courses = await Course.find({ isPublished: true }).populate({ path: "creator", select: "fullname photoUrl" });
     if (!courses) {
       return res.status(404).json({
         message: "Course not found"

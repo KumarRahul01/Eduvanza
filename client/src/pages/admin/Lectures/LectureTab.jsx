@@ -33,7 +33,7 @@ const LectureTab = () => {
   const [mediaProgress, setMediaProgress] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [lectureData, setLectureData] = useState({});
-  const [videoURL, setVideoURL] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
 
   // Params
   const params = useParams();
@@ -126,7 +126,7 @@ const LectureTab = () => {
       setIsLoading(false);
       setLectureData(data?.data.lecture);
       setIsFree(data?.data.lecture.isPreviewFree);
-      setVideoURL(data?.data.lecture.videoUrl);
+      setVideoUrl(data?.data.lecture.videoUrl);
     } catch (error) {
       console.log("Error in fetching lecture details", error);
     }
@@ -176,14 +176,18 @@ const LectureTab = () => {
             placeholder="Ex. Introduction to Javascript"
           />
         </div>
-        {videoURL ? (
+        {videoUrl ? (
           <div className="my-6">
             <Label htmlFor="videoPlayer">Uploaded Video</Label>
             <video
               name="videoPlayer"
               controls
               className="w-[28rem] aspect-video object-cover mt-1 border  rounded-md text-xs"
-              src={videoURL}
+              src={
+                videoUrl.startsWith("http://")
+                  ? videoUrl.replace("http://", "https://")
+                  : videoUrl || "https://via.placeholder.com/150"
+              }
             />
             <div className="my-5">
               <Label>Upload New Video</Label>

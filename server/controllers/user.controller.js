@@ -30,7 +30,20 @@ export const handleUserSignUp = async (req, res) => {
       fullname, username, role, email: lowercaseEmail, password
     });
 
-    return res.status(201).json({ msg: "User Registered Successfully!", user })
+    // Generate token for the newly created user
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+      expiresIn: "1d"
+    });
+
+    // Set the token in a cookie for the user
+    res.cookie("uid", token, {
+      httpOnly: true,  // Protects cookie from JavaScript access
+      secure: true,
+      sameSite: "None", // Optional: Helps prevent CSRF
+      maxAge: 24 * 60 * 60 * 1000, // Expires in 1 day
+    });
+
+    return res.status(201).json({ msg: "User Registered Successfully!", token, user })
 
   } catch (error) {
     console.error("Error creating user:", error);
@@ -45,7 +58,7 @@ export const handleUserLogin = async (req, res) => {
 
 
   try {
-    // const lowercaseEmail = email?.toLowerCase();
+    const lowercaseEmail = email?.toLowerCase();
 
     // Ensure required fields are provided
     if (!password || !email) {
@@ -53,8 +66,8 @@ export const handleUserLogin = async (req, res) => {
     }
 
     // Find user by either username or email
-    // const user = await User.findOne({ email: lowercaseEmail });
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: lowercaseEmail });
+    // const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -75,8 +88,8 @@ export const handleUserLogin = async (req, res) => {
     // set cookie
     res.cookie("uid", token, {
       httpOnly: true,  // Protects cookie from JavaScript access
-      // secure: process.env.NODE_ENV === "production", // For secure cookie in production (requires HTTPS)
-      secure: true,
+      // secure: process.env.NODE_ENV === "production",
+      secure: true, // only accept HTTPS request
       sameSite: "None", // Optional: Helps prevent CSRF
       maxAge: 24 * 60 * 60 * 1000, // Expires in 1 day
     });

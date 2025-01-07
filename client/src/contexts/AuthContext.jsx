@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [userDetails, setUserDetails] = useState([]);
   const [reloadPage, setReloadPage] = useState(false);
 
@@ -32,8 +32,8 @@ export const AuthContextProvider = ({ children }) => {
 
   // Check for UID and fetch data if user is logged in
   useEffect(() => {
+    fetchProfileData();
     if (isLoggedIn) {
-      fetchProfileData();
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);

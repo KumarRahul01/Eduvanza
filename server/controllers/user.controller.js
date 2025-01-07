@@ -4,9 +4,9 @@ import jwt from "jsonwebtoken";
 import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 
 export const handleUserSignUp = async (req, res) => {
-  const { fullname, username, email, password } = req.body;
+  const { fullname, username, role, email, password } = req.body;
 
-  if (!fullname || !username || !email || !password) {
+  if (!fullname || !username || !role || !email || !password) {
     return res.status(400).json({ error: "All fields are required" })
   }
 
@@ -27,7 +27,7 @@ export const handleUserSignUp = async (req, res) => {
 
     // create new user
     const user = await User.create({
-      fullname, username, email: lowercaseEmail, password
+      fullname, username, role, email: lowercaseEmail, password
     });
 
     return res.status(201).json({ msg: "User Registered Successfully!", user })

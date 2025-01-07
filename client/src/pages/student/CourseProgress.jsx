@@ -112,16 +112,15 @@ const CourseProgress = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center my-40">
-        <Loader2 className="w-12 h-12 animate-spin" />
-        Loading...
+      <div className="w-full h-screen flex -my-20 items-center justify-center">
+        <Loader2 className="w-12 h-12 animate-spin" /> Loading ...
       </div>
     );
   }
 
   return (
     <div className="w-full mx-auto h-auto my-2">
-      <div className="w-10/12 mx-auto py-10">
+      <div className="w-10/12 mx-auto py-10 ">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold px-6">
             {courseProgress.courseDetails?.courseTitle ||

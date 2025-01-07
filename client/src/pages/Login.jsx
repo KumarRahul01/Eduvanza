@@ -17,6 +17,15 @@ import { toast } from "sonner";
 import axios from "axios";
 import { AuthContext } from "@/contexts/AuthContext";
 
+// Shadcn Select
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -33,6 +42,7 @@ const Login = () => {
   const [signUpInput, setSignUpInput] = useState({
     fullname: "",
     username: "",
+    role: "Student",
     email: "",
     password: "",
   });
@@ -54,7 +64,16 @@ const Login = () => {
     }
   };
 
+  const handleRoleChange = (newRole) => {
+    setSignUpInput((prev) => ({
+      ...prev,
+      role: newRole, // Update the 'role' field
+    }));
+  };
+
   const signUpLogic = async () => {
+    console.log(setSignUpInput);
+
     try {
       setIsLoading(true);
       await axios.post(
@@ -110,9 +129,6 @@ const Login = () => {
   };
 
   const handlerRegisteration = async (type) => {
-    // const inputData = type === "signup" ? signUpInput : loginInput;
-    // const action = type === "signup" ? signUpUser : loginUser;
-    // await action(inputData);
     if (type === "signup") signUpLogic();
     if (type === "login") loginLogic();
   };
@@ -139,14 +155,14 @@ const Login = () => {
         <TabsContent value="signup">
           <Card>
             <CardHeader>
-              <div className="w-full flex items-center justify-center pb-2">
+              {/* <div className="w-full flex items-center justify-center pb-2">
                 <Button>Sign Up With Google</Button>
               </div>
               <div className="flex items-center justify-center">
                 <div className="w-full border h-[2px]"></div>
                 <div className="w-4 mx-4 font-semibold">OR</div>
                 <div className="w-full border h-[2px]"></div>
-              </div>
+              </div> */}
               <CardTitle>Sign Up</CardTitle>
               <CardDescription>
                 Create a new account and click signup when you are done.
@@ -181,6 +197,26 @@ const Login = () => {
                   required
                 />
               </div>
+
+              {/* Role */}
+              <div className="space-y-1">
+                <Label htmlFor="role">
+                  Role<span className="text-red-500">*</span>
+                </Label>
+                <Select
+                  value={signUpInput.role}
+                  onValueChange={handleRoleChange}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Student" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Student">Student</SelectItem>
+                    <SelectItem value="Instructor">Instructor</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {/* Role End Here */}
               <div className="space-y-1">
                 <Label htmlFor="email">
                   Email<span className="text-red-500">*</span>
@@ -244,14 +280,14 @@ const Login = () => {
         <TabsContent value="login">
           <Card>
             <CardHeader>
-              <div className="w-full flex items-center justify-center pb-2">
+              {/* <div className="w-full flex items-center justify-center pb-2">
                 <Button>Login With Google</Button>
               </div>
               <div className="flex items-center justify-center">
                 <div className="w-full border h-[2px]"></div>
                 <div className="w-4 mx-4 font-semibold">OR</div>
                 <div className="w-full border h-[2px]"></div>
-              </div>
+              </div> */}
               <CardTitle>Login</CardTitle>
               <CardDescription>
                 Login your password here. After signup, you will be logged in.

@@ -89,7 +89,6 @@ const LectureTab = () => {
           withCredentials: true,
         }
       );
-      // console.log("mtDta", myData);
 
       if (res) {
         console.log("Lecture Updated", res);

@@ -20,7 +20,7 @@ const url = process.env.MONGODB_URI;
 connectDB(url);
 
 const corsOptions = {
-  origin: "https://eduvanza.vercel.app", // frontendURL
+  origin: [`${process.env.FRONTEND_URL}`, "http://localhost:5173"], // frontendURLs
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
 }
@@ -40,7 +40,7 @@ app.use("/api/progress", courseProgressRoutes)
 
 
 
-app.get("/", (req, res) => res.status(200).json({ msg: "Message from Express" }));
+app.get("/", (req, res) => res.status(200).json({ msg: "Hello from Backend" }));
 
 
 app.listen(PORT, () => {

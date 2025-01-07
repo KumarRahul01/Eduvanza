@@ -174,7 +174,11 @@ const CourseDetails = () => {
               <div className="w-full h-fit rounded-sm overflow-hidden mb-2">
                 <video
                   className="aspect-video object-contain w-full"
-                  src={videoUrl || "https://via.placeholder.com/150"}
+                  src={
+                    videoUrl?.startsWith("http://")
+                      ? videoUrl.replace("http://", "https://")
+                      : videoUrl || "https://via.placeholder.com/150"
+                  }
                   controls
                 />
               </div>

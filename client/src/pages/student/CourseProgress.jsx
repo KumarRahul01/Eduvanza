@@ -150,10 +150,19 @@ const CourseProgress = () => {
           <div className="rounded-lg shadow-xl md:w-3/5 overflow-hidden h-fit">
             <div className="overflow-hidden rounded-md w-full aspect-video px-6 pt-6">
               <video
+                // src={
+                //   currLecture?.videoUrl ||
+                //   initialLecture.videoUrl ||
+                //   "https://via.placeholder.com/"
+                // }
                 src={
-                  currLecture?.videoUrl ||
-                  initialLecture.videoUrl ||
-                  "https://via.placeholder.com/"
+                  [
+                    currLecture?.videoUrl,
+                    initialLecture?.videoUrl,
+                    "https://via.placeholder.com/",
+                  ]
+                    .find((url) => url) // Select the first non-null/undefined URL
+                    ?.replace("http://", "https://") // Ensure HTTPS
                 }
                 className="rounded-sm shadow w-full h-auto"
                 controls

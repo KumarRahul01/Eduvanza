@@ -103,4 +103,7 @@ An advanced e-learning platform designed for seamless course management and an e
 9. Start the development server:
    ```bash
    cd server npm index.js 
-  ```  
+
+10. Access the app in your browser at `http://localhost:5173`.
+
+---

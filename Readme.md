@@ -103,6 +103,4 @@ An advanced e-learning platform designed for seamless course management and an e
 9. Start the development server:
    ```bash
    cd server npm index.js 
-  ```
-
-  
+  ```  

@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, User } from "lucide-react";
 import { toast } from "sonner";
 import axios from "axios";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -49,6 +49,7 @@ const Login = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [isGuestLogin, setIsGuestLogin] = useState(false);
 
   const ChangeInputHandler = (e, type) => {
     if (type === "login") {
@@ -100,7 +101,7 @@ const Login = () => {
 
   const loginLogic = async () => {
     setIsLoading(true);
-    // console.log(loginInput);
+    console.log(loginInput);
     try {
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}api/user/login`,
@@ -131,11 +132,26 @@ const Login = () => {
     if (type === "login") loginLogic();
   };
 
+  const handleLoginAsGuest = () => {
+    setLoginInput({
+      email: `${import.meta.env.VITE_GUEST_EMAIL}`,
+      password: `${import.meta.env.VITE_GUEST_PASSWORD}`,
+    });
+    setIsGuestLogin(true);
+  };
+
   useEffect(() => {
     // Update the tab based on URL path
     const urlPath = window.location.pathname;
     setCurrentTab(urlPath === "/login" ? "login" : "signup");
-  }, []);
+
+    // Login As Guest
+    if (isGuestLogin) {
+      loginLogic();
+      setIsGuestLogin(false); // Reset the flag
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isGuestLogin, loginInput]);
 
   return (
     <div className="flex justify-center items-center w-full h-[90vh] mt-10 md:mt-0">
@@ -278,14 +294,19 @@ const Login = () => {
         <TabsContent value="login">
           <Card>
             <CardHeader>
-              {/* <div className="w-full flex items-center justify-center pb-2">
-                <Button>Login With Google</Button>
+              <div className="w-full flex items-center justify-center pb-2">
+                <Button onClick={() => handleLoginAsGuest()}>
+                  Login As Guest
+                  <span className="mb-[2px]">
+                    <User size={"20px"} />
+                  </span>
+                </Button>
               </div>
               <div className="flex items-center justify-center">
                 <div className="w-full border h-[2px]"></div>
                 <div className="w-4 mx-4 font-semibold">OR</div>
                 <div className="w-full border h-[2px]"></div>
-              </div> */}
+              </div>
               <CardTitle>Login</CardTitle>
               <CardDescription>
                 Login your password here. After signup, you will be logged in.

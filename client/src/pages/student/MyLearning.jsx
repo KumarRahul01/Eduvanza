@@ -8,8 +8,6 @@ const MyLearning = () => {
   // const myLearning = [];
   const [myLearning, setMyLearning] = useState([]);
 
-  console.log(myLearning);
-
   const fetchUserData = async () => {
     setIsLoading(true);
     const data = await axios.get(

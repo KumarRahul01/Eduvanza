@@ -30,8 +30,6 @@ const Navbar = () => {
 
   const { userDetails, isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
 
-  // TODO: Make logout Handler functionality try gpt to write code to rmove cookie
-
   // Logout Handler
   const logoutHandler = async () => {
     try {
@@ -145,7 +143,6 @@ const Navbar = () => {
                   ) : (
                     <>
                       <DropdownMenuSeparator />
-
                       <DropdownMenuItem
                         className="cursor-pointer w-full"
                         onClick={logoutHandler}
@@ -187,7 +184,21 @@ export default Navbar;
 
 const MobileNavbar = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, userDetails, logoutHandler } = useContext(AuthContext);
+  const { isLoggedIn, userDetails, setIsLoggedIn } = useContext(AuthContext);
+
+  // Logout Handler
+  const logoutHandler = async () => {
+    try {
+      await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/user/logout`, {
+        withCredentials: true,
+      });
+      console.log("Logout Successfully!");
+      navigate("/");
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.log("Error Logout Frontend", error);
+    }
+  };
 
   return (
     <>
@@ -212,7 +223,7 @@ const MobileNavbar = () => {
                 <>
                   <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
                     <NavLink
-                      to="/admin/dashboard"
+                      to="/my-learning"
                       className={({ isActive }) =>
                         isActive
                           ? "text-red-500 font-semibold w-full"
@@ -224,7 +235,7 @@ const MobileNavbar = () => {
                   </div>
                   <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
                     <NavLink
-                      to="/admin/dashboard"
+                      to="/profile"
                       className={({ isActive }) =>
                         isActive
                           ? "text-red-500 font-semibold w-full"
@@ -234,6 +245,8 @@ const MobileNavbar = () => {
                       Edit Profile
                     </NavLink>
                   </div>
+                  <Button onClick={logoutHandler}>Log Out</Button>
+
                   <div className="hover:border-[2px] border-gray-300 p-1 rounded-md">
                     {userDetails.role !== "Student" && (
                       <NavLink
@@ -250,10 +263,8 @@ const MobileNavbar = () => {
                   </div>
                 </>
               )}
-              {isLoggedIn ? (
-                <Button onClick={logoutHandler}>Log Out</Button>
-              ) : (
-                <div className="flex flex-col gap-6 my-20">
+              {!isLoggedIn && (
+                <div className="flex flex-col gap-6">
                   <Button onClick={() => navigate("/signup")}>SignUp</Button>
                   <Button onClick={() => navigate("/login")}>Login</Button>
                 </div>

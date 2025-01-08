@@ -204,7 +204,7 @@ const Profile = () => {
       {/* CoursesEnrolled */}
       <div className="my-10">
         <h1 className="font-medium text-lg">Courses you&apos;re enrolled in</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
           {enrolledCourses === undefined || enrolledCourses.length === 0 ? (
             <h1 className="my-3">You haven&apos;t enrolled any course yet</h1>
           ) : (

@@ -24,6 +24,7 @@ import {
   AuthenticatedUser,
   ProtectedRoutes,
 } from "./components/ProtectedRoutes";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
@@ -135,6 +136,7 @@ const App = () => {
           </Route>
         </Routes>
       </main>
+      <Footer />
     </>
   );
 };

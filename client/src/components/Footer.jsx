@@ -14,17 +14,26 @@ const Footer = () => {
         {/* Social Media Links */}
         <div className="lg:w-1/3 flex space-x-4 justify-center mb-4 md:mb-0 text-black">
           <a href="#" target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" className="hover:bg-slate-200">
+            <Button
+              variant="outline"
+              className="hover:bg-slate-200 dark:bg-slate-100 dark:hover:bg-slate-300 dark:hover:text-black"
+            >
               Facebook
             </Button>
           </a>
           <a href="#" target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" className="hover:bg-slate-200">
+            <Button
+              variant="outline"
+              className="hover:bg-slate-200 dark:bg-slate-100 dark:hover:bg-slate-300 dark:hover:text-black"
+            >
               Twitter
             </Button>
           </a>
           <a href="#" target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" className="hover:bg-slate-200">
+            <Button
+              variant="outline"
+              className="hover:bg-slate-200 dark:bg-slate-100 dark:hover:bg-slate-300 dark:hover:text-black"
+            >
               Instagram
             </Button>
           </a>

@@ -19,7 +19,7 @@ const url = process.env.MONGODB_URI;
 // Connecting to database
 connectDB(url);
 
-console.log("frontend", `${process.env.FRONTEND_URL}`);
+// console.log("frontend", `${process.env.FRONTEND_URL}`);
 
 
 const corsOptions = {
@@ -40,6 +40,7 @@ app.use("/api/media", mediaRoutes)
 app.use("/api/payment", paymentRoutes);
 app.use("/api/details", coursePurchaseNavigateRoutes)
 app.use("/api/progress", courseProgressRoutes)
+
 
 
 
